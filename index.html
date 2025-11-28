@@ -3,7 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ram Harikrishnan | AI Systems Engineer</title>
+    <title>Ram Harikrishnan | AI Systems Engineer | MS Computer Science @ ASU</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="AI Systems Engineer and Applied ML Engineer specializing in reinforcement learning, GraphRAG architectures, and scalable AI infrastructure. Winner of AMD's Synthetic Data AI Agents Challenge. Seeking software engineering co-op opportunities.">
+    <meta name="keywords" content="AI Systems Engineer, Machine Learning Engineer, ML Engineer, Reinforcement Learning, GraphRAG, PyTorch, Full-Stack Developer, Software Engineer, ASU, Computer Science">
+    <meta name="author" content="Ram Harikrishnan">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ramharikrishnan.dev/">
+    <meta property="og:title" content="Ram Harikrishnan | AI Systems Engineer">
+    <meta property="og:description" content="AI Systems Engineer specializing in reinforcement learning, GraphRAG architectures, and scalable AI infrastructure. Winner of AMD's Synthetic Data AI Agents Challenge.">
+    <meta property="og:image" content="https://ramharikrishnan.dev/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://ramharikrishnan.dev/">
+    <meta property="twitter:title" content="Ram Harikrishnan | AI Systems Engineer">
+    <meta property="twitter:description" content="AI Systems Engineer specializing in reinforcement learning, GraphRAG architectures, and scalable AI infrastructure.">
+    <meta property="twitter:image" content="https://ramharikrishnan.dev/og-image.jpg">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Ram Harikrishnan",
+      "jobTitle": "AI Systems Engineer",
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Arizona State University"
+      },
+      "email": "rharikh2@asu.edu",
+      "url": "https://ramharikrishnan.dev",
+      "sameAs": [
+        "https://www.linkedin.com/in/ram-harikrishnan/",
+        "https://github.com/shankerram3"
+      ],
+      "knowsAbout": [
+        "Machine Learning",
+        "Artificial Intelligence",
+        "Reinforcement Learning",
+        "GraphRAG",
+        "PyTorch",
+        "Full-Stack Development"
+      ],
+      "award": "Winner of AMD's Synthetic Data AI Agents Challenge"
+    }
+    </script>
     <style>
         * {
             margin: 0;
@@ -485,6 +534,43 @@
             color: var(--text-primary);
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 1001;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn:focus {
+            outline: 2px solid var(--accent-primary);
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 968px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 280px;
+                background: var(--bg-primary);
+                flex-direction: column;
+                padding: 5rem 2rem;
+                border-left: 1px solid var(--border-color);
+                transition: right 0.3s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                margin-bottom: 1.5rem;
+            }
+
+            .nav-links a {
+                font-size: 1.2rem;
+                display: block;
+                padding: 0.5rem 0;
+            }
         }
 
         /* Responsive */
@@ -499,10 +585,6 @@
 
             .section-title {
                 font-size: 2.5rem;
-            }
-
-            .nav-links {
-                display: none;
             }
 
             .mobile-menu-btn {
@@ -557,25 +639,74 @@
         .hero-roles { animation-delay: 0.3s; }
         .hero-description { animation-delay: 0.4s; }
         .cta-buttons { animation-delay: 0.5s; }
+
+        /* Resume Download Button */
+        .resume-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-card);
+            color: var(--accent-primary);
+            border: 2px solid var(--accent-primary);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .resume-download:hover {
+            background: var(--accent-primary);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Skip to main content for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--accent-primary);
+            color: var(--text-primary);
+            padding: 8px;
+            text-decoration: none;
+            z-index: 10000;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Focus styles for accessibility */
+        a:focus,
+        button:focus {
+            outline: 2px solid var(--accent-primary);
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#home" class="skip-link">Skip to main content</a>
+    
     <!-- Navigation -->
-    <nav>
+    <nav role="navigation" aria-label="Main navigation">
         <div class="nav-container">
-            <div class="logo">RH</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#contact">Contact</a></li>
+            <div class="logo" aria-label="Ram Harikrishnan">RH</div>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a href="#home" role="menuitem">Home</a></li>
+                <li role="none"><a href="#projects" role="menuitem">Projects</a></li>
+                <li role="none"><a href="#skills" role="menuitem">Skills</a></li>
+                <li role="none"><a href="#contact" role="menuitem">Contact</a></li>
             </ul>
-            <button class="mobile-menu-btn">☰</button>
+            <button class="mobile-menu-btn" aria-label="Toggle mobile menu" aria-expanded="false">☰</button>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
+    <section id="home" class="hero" role="main">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-subtitle">MS Computer Science @ ASU</div>
@@ -593,6 +724,9 @@
                 <div class="cta-buttons">
                     <a href="#projects" class="btn btn-primary">View Projects</a>
                     <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                    <a href="/resume.pdf" class="resume-download" download aria-label="Download resume PDF">
+                        📄 Download Resume
+                    </a>
                 </div>
             </div>
         </div>
@@ -773,14 +907,17 @@
                     Open to discussing ML engineering, full-stack development, and innovative AI projects.
                 </p>
                 <div class="social-links">
-                    <a href="https://www.linkedin.com/in/ram-harikrishnan/" class="social-link" target="_blank">
+                    <a href="https://www.linkedin.com/in/ram-harikrishnan/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Visit LinkedIn profile">
                         LinkedIn
                     </a>
-                    <a href="https://github.com/shankerram3" class="social-link" target="_blank">
+                    <a href="https://github.com/shankerram3" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Visit GitHub profile">
                         GitHub
                     </a>
-                    <a href="mailto:rharikh2@asu.edu" class="social-link">
+                    <a href="mailto:rharikh2@asu.edu" class="social-link" aria-label="Send email to rharikh2@asu.edu">
                         Email
+                    </a>
+                    <a href="/resume.pdf" class="social-link" download aria-label="Download resume PDF">
+                        📄 Resume
                     </a>
                 </div>
             </div>
@@ -795,26 +932,50 @@
     </footer>
 
     <script>
-        // Smooth scrolling for navigation links
+        // Mobile menu toggle with proper accessibility
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const isOpen = navLinks.classList.contains('active');
+                navLinks.classList.toggle('active');
+                mobileMenuBtn.setAttribute('aria-expanded', !isOpen);
+                mobileMenuBtn.textContent = isOpen ? '☰' : '✕';
+            });
+
+            // Close menu when clicking on a link
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    mobileMenuBtn.textContent = '☰';
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    mobileMenuBtn.textContent = '☰';
+                }
+            });
+        }
+
+        // Add smooth scroll offset for fixed nav
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    const offsetTop = target.offsetTop - 80; // Account for fixed nav
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
                     });
                 }
             });
-        });
-
-        // Mobile menu toggle (basic implementation)
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
     </script>
 </body>
