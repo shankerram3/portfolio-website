@@ -53,6 +53,9 @@
       "award": "Winner of AMD's Synthetic Data AI Agents Challenge"
     }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -75,15 +78,38 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'VT323', 'Courier New', monospace;
             background-color: var(--bg-primary);
             background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
+                linear-gradient(var(--grid-color) 2px, transparent 2px),
+                linear-gradient(90deg, var(--grid-color) 2px, transparent 2px);
+            background-size: 40px 40px;
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        /* Retro decorative elements */
+        .retro-star {
+            position: absolute;
+            color: #ffffff;
+            font-size: 1.5rem;
+            animation: twinkle 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .retro-shape {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Navigation */
@@ -108,18 +134,23 @@
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.2rem;
+            font-weight: normal;
+            color: var(--accent-primary);
             text-transform: uppercase;
             letter-spacing: 2px;
-            border: 3px solid var(--accent-primary);
+            border: 4px solid var(--accent-primary);
             padding: 0.5rem 1rem;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background: #ffffff;
+            box-shadow: 4px 4px 0px var(--accent-secondary);
+            position: relative;
+        }
+
+        .logo::before {
+            content: '●';
+            color: var(--accent-secondary);
+            margin-right: 0.5rem;
         }
 
         .nav-links {
@@ -129,42 +160,49 @@
         }
 
         .nav-links a {
-            color: var(--text-primary);
+            color: #1a237e;
             text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            border: 2px solid transparent;
+            transition: all 0.1s ease;
+            font-weight: normal;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            padding: 0.4rem 0.8rem;
+            border: 3px solid transparent;
+            text-transform: uppercase;
         }
 
         .nav-links a:hover {
-            color: var(--accent-primary);
-            background: rgba(255, 107, 53, 0.1);
-            border-color: var(--accent-primary);
-            transform: translateY(-2px);
+            color: #1a237e;
+            background: var(--accent-secondary);
+            border-color: #1a237e;
+            box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
         }
 
         .nav-resume-btn {
-            padding: 0.6rem 1.5rem;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            color: #ffffff;
+            padding: 0.5rem 1.2rem;
+            background: var(--accent-secondary);
+            color: #1a237e;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
+            font-weight: normal;
+            transition: all 0.1s ease;
+            font-size: 0.7rem;
+            font-family: 'Press Start 2P', monospace;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            border: 3px solid var(--accent-primary);
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            border: 4px solid #1a237e;
+            box-shadow: 3px 3px 0px rgba(26, 35, 126, 0.3);
+            text-transform: uppercase;
         }
 
         .nav-resume-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5);
-            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+            background: var(--accent-primary);
+            color: #ffffff;
+        }
+
+        .nav-resume-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px rgba(26, 35, 126, 0.3);
         }
 
         /* Container */
@@ -250,52 +288,60 @@
         }
 
         .hero-subtitle {
-            color: var(--accent-primary);
-            font-size: 1.1rem;
+            font-family: 'Press Start 2P', monospace;
+            color: #1a237e;
+            font-size: 0.7rem;
             margin-bottom: 1rem;
-            font-weight: 700;
+            font-weight: normal;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             padding: 0.5rem 1rem;
-            background: rgba(255, 107, 53, 0.1);
-            border: 2px solid var(--accent-primary);
-            border-radius: 8px;
+            background: var(--accent-secondary);
+            border: 4px solid #1a237e;
             display: inline-block;
+            box-shadow: 3px 3px 0px rgba(26, 35, 126, 0.3);
         }
 
         .hero-title {
-            font-size: 4.5rem;
-            font-weight: 900;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 2.5rem;
+            font-weight: normal;
             margin-bottom: 1rem;
-            line-height: 1.1;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
+            line-height: 1.4;
+            color: #1a237e;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 4px 4px 0px var(--accent-primary);
         }
 
         .hero-roles {
-            font-size: 1.8rem;
-            color: var(--text-secondary);
+            font-size: 1.2rem;
+            color: var(--text-primary);
             margin-bottom: 2rem;
-            line-height: 1.4;
+            line-height: 1.6;
+            font-family: 'VT323', monospace;
         }
 
         .hero-roles .role {
-            color: var(--accent-primary);
-            font-weight: 700;
-            padding: 0.25rem 0.5rem;
-            background: rgba(255, 107, 53, 0.1);
-            border-radius: 4px;
+            font-family: 'Press Start 2P', monospace;
+            color: #1a237e;
+            font-weight: normal;
+            font-size: 0.6rem;
+            padding: 0.3rem 0.6rem;
+            background: #ffffff;
+            border: 3px solid #1a237e;
+            display: inline-block;
+            margin: 0 0.3rem;
+            box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
         }
 
         .hero-description {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
+            font-size: 1.3rem;
+            color: var(--text-primary);
             max-width: 700px;
             margin-bottom: 3rem;
             line-height: 1.8;
+            font-family: 'VT323', monospace;
         }
 
         .cta-buttons {
@@ -305,40 +351,46 @@
         }
 
         .btn {
-            padding: 1rem 2.5rem;
-            border-radius: 8px;
+            padding: 0.8rem 2rem;
+            border: 4px solid #1a237e;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: normal;
+            transition: all 0.1s ease;
             display: inline-block;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            font-family: 'Press Start 2P', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px rgba(26, 35, 126, 0.3);
+        }
+
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            color: #ffffff;
-            border: 3px solid var(--accent-primary);
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            background: var(--accent-secondary);
+            color: #1a237e;
+            border: 4px solid #1a237e;
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5);
-            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+            background: var(--accent-primary);
+            color: #ffffff;
         }
 
         .btn-secondary {
             background: transparent;
-            color: var(--accent-primary);
-            border: 3px solid var(--accent-primary);
-            font-weight: 700;
+            color: #1a237e;
+            border: 4px solid #1a237e;
         }
 
         .btn-secondary:hover {
             background: var(--accent-primary);
             color: #ffffff;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.4);
         }
 
         /* Section Styles */
@@ -357,49 +409,89 @@
         }
 
         .section-title {
-            font-size: 3rem;
-            font-weight: 900;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.8rem;
+            font-weight: normal;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #1a237e;
             text-transform: uppercase;
             letter-spacing: 2px;
+            text-shadow: 3px 3px 0px var(--accent-primary);
         }
 
         .section-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            font-family: 'VT323', monospace;
+        }
+
+        /* Window-style cards */
+        .window-frame {
+            background: var(--bg-card);
+            border: 4px solid #1a237e;
+            box-shadow: 8px 8px 0px rgba(26, 35, 126, 0.3);
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .window-title-bar {
+            background: #64b5f6;
+            border-bottom: 4px solid #1a237e;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            color: #1a237e;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .window-control {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #1a237e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            cursor: pointer;
+        }
+
+        .window-control.minimize { background: var(--accent-secondary); }
+        .window-control.maximize { background: var(--accent-tertiary); }
+        .window-control.close { background: #ef5350; color: #ffffff; }
+
+        .window-content {
+            padding: 2rem;
+            background: #fff9c4;
+            border: 4px solid #1a237e;
+            border-top: none;
         }
 
         /* Featured Project */
         .featured-project {
             background: var(--bg-card);
-            border-radius: 20px;
-            padding: 3.5rem;
-            border: 4px solid var(--accent-primary);
+            border: 4px solid #1a237e;
             margin-bottom: 4rem;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.2);
-            transition: all 0.4s ease;
+            overflow: visible;
+            box-shadow: 8px 8px 0px rgba(26, 35, 126, 0.3);
+            transition: all 0.2s ease;
         }
 
         .featured-project:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.3);
-            border-color: var(--accent-secondary);
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px rgba(26, 35, 126, 0.3);
         }
 
-        .featured-project::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+        .featured-project .window-content {
+            padding: 3rem;
         }
 
         .featured-project::after {
@@ -415,26 +507,33 @@
 
         .featured-badge {
             display: inline-block;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            color: var(--text-primary);
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.9rem;
+            background: var(--accent-primary);
+            color: #ffffff;
+            padding: 0.4rem 1rem;
+            border: 4px solid #1a237e;
+            font-weight: normal;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
             margin-bottom: 1.5rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+            box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
         }
 
         .project-title {
-            font-size: 2.5rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.2rem;
             margin-bottom: 1rem;
-            color: var(--text-primary);
+            color: #1a237e;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.6;
         }
 
         .project-description {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
+            font-size: 1.1rem;
+            color: var(--text-primary);
             margin-bottom: 2rem;
             line-height: 1.8;
         }
@@ -450,32 +549,30 @@
             text-align: center;
             padding: 2rem 1.5rem;
             background: var(--bg-card);
-            border-radius: 16px;
-            border: 3px solid var(--border-color);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
+            border: 4px solid #1a237e;
+            transition: all 0.1s ease;
+            box-shadow: 4px 4px 0px rgba(26, 35, 126, 0.3);
         }
 
         .stat-item:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-primary);
-            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.2);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px rgba(26, 35, 126, 0.3);
         }
 
         .stat-number {
-            font-size: 2.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 2rem;
+            font-weight: normal;
+            color: #1a237e;
             margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px var(--accent-primary);
         }
 
         .stat-label {
-            color: var(--text-secondary);
+            color: var(--text-primary);
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: normal;
+            font-family: 'VT323', monospace;
         }
 
         /* Projects Grid */
@@ -488,52 +585,46 @@
 
         .project-card {
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2.5rem;
-            border: 3px solid var(--border-color);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 4px solid #1a237e;
+            padding: 0;
+            transition: all 0.1s ease;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             height: 100%;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
+            box-shadow: 6px 6px 0px rgba(26, 35, 126, 0.3);
         }
 
         .project-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-primary);
-            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.25);
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0px rgba(26, 35, 126, 0.3);
         }
 
-        .project-card:hover::before {
-            transform: scaleX(1);
+        .project-card .window-content {
+            padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .project-card h3 {
-            font-size: 1.7rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1rem;
             margin-bottom: 1rem;
-            color: var(--text-primary);
-            font-weight: 700;
+            color: #1a237e;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.6;
         }
 
         .project-card p {
-            color: var(--text-secondary);
+            color: var(--text-primary);
             margin-bottom: 1.5rem;
             line-height: 1.8;
             flex-grow: 1;
+            font-size: 1.1rem;
         }
 
         .tech-tags {
@@ -544,21 +635,28 @@
         }
 
         .tech-tag {
-            background: rgba(255, 107, 53, 0.1);
-            color: var(--accent-primary);
-            padding: 0.5rem 1.1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            border: 2px solid var(--accent-primary);
-            transition: all 0.3s ease;
+            background: #ffffff;
+            color: #1a237e;
+            padding: 0.4rem 0.8rem;
+            border: 3px solid #1a237e;
+            font-size: 0.9rem;
+            font-weight: normal;
+            font-family: 'VT323', monospace;
+            display: inline-block;
+            transition: all 0.1s ease;
+            box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
         }
 
         .tech-tag:hover {
             background: var(--accent-primary);
             color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0px rgba(26, 35, 126, 0.3);
+        }
+
+        .tech-tag:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px rgba(26, 35, 126, 0.3);
         }
 
         .project-links {
@@ -567,17 +665,30 @@
         }
 
         .project-link {
-            color: var(--accent-primary);
+            color: #1a237e;
             text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: color 0.3s ease;
+            font-weight: normal;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border: 3px solid #1a237e;
+            background: #ffffff;
+            transition: all 0.1s ease;
+            box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
+            text-transform: uppercase;
         }
 
         .project-link:hover {
-            color: var(--accent-secondary);
+            background: var(--accent-primary);
+            color: #ffffff;
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0px rgba(26, 35, 126, 0.3);
+        }
+
+        .project-link:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px rgba(26, 35, 126, 0.3);
         }
 
         /* Experience Section */
@@ -591,35 +702,21 @@
 
         .experience-item {
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2.5rem;
-            border: 3px solid var(--border-color);
+            border: 4px solid #1a237e;
+            padding: 0;
             position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
-        }
-
-        .experience-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
+            transition: all 0.1s ease;
+            overflow: visible;
+            box-shadow: 6px 6px 0px rgba(26, 35, 126, 0.3);
         }
 
         .experience-item:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-primary);
-            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.25);
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0px rgba(26, 35, 126, 0.3);
         }
 
-        .experience-item:hover::before {
-            transform: scaleX(1);
+        .experience-item .window-content {
+            padding: 2rem;
         }
 
         .experience-header {
@@ -630,42 +727,49 @@
         }
 
         .experience-title {
-            font-size: 1.6rem;
-            color: var(--accent-primary);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.9rem;
+            color: #1a237e;
             margin-bottom: 0.75rem;
-            font-weight: 800;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .experience-company {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: var(--text-primary);
-            font-weight: 600;
+            font-weight: normal;
             margin-bottom: 0.5rem;
+            font-family: 'VT323', monospace;
         }
 
         .experience-date {
-            color: var(--accent-primary);
-            font-size: 0.9rem;
-            font-weight: 700;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 107, 53, 0.15);
-            border: 2px solid var(--accent-primary);
-            border-radius: 8px;
+            color: #1a237e;
+            font-size: 1rem;
+            font-weight: normal;
+            font-family: 'Press Start 2P', monospace;
+            padding: 0.4rem 0.8rem;
+            background: var(--accent-secondary);
+            border: 3px solid #1a237e;
             display: inline-block;
             margin-bottom: 1rem;
+            box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
         }
 
         .experience-location {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-size: 1rem;
             margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-family: 'VT323', monospace;
         }
 
         .experience-location::before {
-            content: '📍';
+            content: '●';
+            color: var(--accent-primary);
         }
 
         .experience-description {
@@ -706,29 +810,35 @@
 
         .education-card {
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2.5rem;
-            border: 3px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
-            transition: all 0.3s ease;
+            border: 4px solid #1a237e;
+            padding: 0;
+            box-shadow: 6px 6px 0px rgba(26, 35, 126, 0.3);
+            transition: all 0.1s ease;
         }
 
         .education-card:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
-            transform: translateY(-3px);
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0px rgba(26, 35, 126, 0.3);
+        }
+
+        .education-card .window-content {
+            padding: 2rem;
         }
 
         .education-degree {
-            font-size: 1.5rem;
-            color: var(--accent-primary);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.9rem;
+            color: #1a237e;
             margin-bottom: 0.5rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            line-height: 1.6;
         }
 
         .education-school {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-primary);
-            font-weight: 600;
+            font-weight: normal;
             margin-bottom: 0.5rem;
         }
 
@@ -784,47 +894,44 @@
 
         .achievement-card {
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2.5rem;
-            border: 3px solid var(--border-color);
+            border: 4px solid #1a237e;
+            padding: 0;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
-            transition: all 0.3s ease;
+            overflow: visible;
+            box-shadow: 6px 6px 0px rgba(26, 35, 126, 0.3);
+            transition: all 0.1s ease;
         }
 
         .achievement-card:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
-            transform: translateY(-3px);
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0px rgba(26, 35, 126, 0.3);
         }
 
-        .achievement-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+        .achievement-card .window-content {
+            padding: 2rem;
         }
 
         .achievement-year {
-            color: var(--accent-primary);
-            font-size: 0.9rem;
-            font-weight: 700;
+            color: #1a237e;
+            font-size: 1rem;
+            font-weight: normal;
+            font-family: 'Press Start 2P', monospace;
             margin-bottom: 0.5rem;
             padding: 0.4rem 0.8rem;
-            background: rgba(255, 107, 53, 0.15);
-            border: 2px solid var(--accent-primary);
-            border-radius: 6px;
+            background: var(--accent-secondary);
+            border: 3px solid #1a237e;
             display: inline-block;
+            box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
         }
 
         .achievement-title {
-            font-size: 1.3rem;
-            color: var(--text-primary);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8rem;
+            color: #1a237e;
             margin-bottom: 1rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            line-height: 1.6;
         }
 
         .achievement-description {
@@ -841,27 +948,32 @@
 
         .skill-category {
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2.5rem;
-            border: 3px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
-            transition: all 0.3s ease;
+            border: 4px solid #1a237e;
+            padding: 0;
+            box-shadow: 6px 6px 0px rgba(26, 35, 126, 0.3);
+            transition: all 0.1s ease;
         }
 
         .skill-category:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
-            transform: translateY(-3px);
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0px rgba(26, 35, 126, 0.3);
+        }
+
+        .skill-category .window-content {
+            padding: 2rem;
         }
 
         .skill-category h3 {
-            font-size: 1.5rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.9rem;
             margin-bottom: 1.5rem;
-            color: var(--accent-primary);
+            color: #1a237e;
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            font-weight: 800;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .skill-list {
@@ -888,16 +1000,24 @@
         /* Contact Section */
         .contact-section {
             background: var(--bg-card);
-            border-radius: 20px;
-            padding: 4rem;
+            border: 4px solid #1a237e;
+            padding: 0;
             text-align: center;
-            border: 4px solid var(--accent-primary);
-            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.2);
+            box-shadow: 8px 8px 0px rgba(26, 35, 126, 0.3);
+        }
+
+        .contact-section .window-content {
+            padding: 4rem;
         }
 
         .contact-title {
-            font-size: 3rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.5rem;
             margin-bottom: 1rem;
+            color: #1a237e;
+            font-weight: normal;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0px var(--accent-primary);
         }
 
         .contact-description {
@@ -920,23 +1040,29 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 1rem 2.5rem;
-            background: var(--bg-card);
-            border-radius: 12px;
-            color: var(--text-primary);
+            padding: 0.8rem 2rem;
+            background: #ffffff;
+            color: #1a237e;
             text-decoration: none;
-            border: 3px solid var(--border-color);
-            transition: all 0.3s ease;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
+            border: 4px solid #1a237e;
+            transition: all 0.1s ease;
+            font-weight: normal;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            box-shadow: 3px 3px 0px rgba(26, 35, 126, 0.3);
+            text-transform: uppercase;
         }
 
         .social-link:hover {
-            border-color: var(--accent-primary);
-            background: rgba(255, 107, 53, 0.1);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+            background: var(--accent-primary);
+            color: #ffffff;
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px rgba(26, 35, 126, 0.3);
+        }
+
+        .social-link:active {
+            transform: translate(1px, 1px);
+            box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
         }
 
         /* Footer */
@@ -1196,7 +1322,16 @@
             </div>
 
             <div class="experience-timeline" style="margin-top: 4rem;">
-                <div class="experience-item">
+                <div class="experience-item window-frame">
+                    <div class="window-title-bar">
+                        <span>EXPERIENCE</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <div class="experience-header">
                         <div class="experience-date">May 2024 - Present</div>
                         <h3 class="experience-title">Full Stack Developer</h3>
@@ -1213,9 +1348,19 @@
                             <li>Created Python and Bash automation scripts to streamline data processing and deployment workflows</li>
                         </ul>
                     </div>
+                    </div>
                 </div>
 
-                <div class="experience-item">
+                <div class="experience-item window-frame">
+                    <div class="window-title-bar">
+                        <span>EXPERIENCE</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <div class="experience-header">
                         <div class="experience-date">May 2022 - October 2023</div>
                         <h3 class="experience-title">Full Stack Developer</h3>
@@ -1232,9 +1377,19 @@
                             <li>Automated CI/CD pipelines using Jenkins for legacy and modern systems; developed test suites using Cypress and Jest</li>
                         </ul>
                     </div>
+                    </div>
                 </div>
 
-                <div class="experience-item">
+                <div class="experience-item window-frame">
+                    <div class="window-title-bar">
+                        <span>EXPERIENCE</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <div class="experience-header">
                         <div class="experience-date">December 2020 - April 2022</div>
                         <h3 class="experience-title">Software Engineer & Co-founder</h3>
@@ -1250,6 +1405,7 @@
                             <li>Built real-time communication protocols (MQTT/WebSockets) enabling seamless embedded device-to-cloud connectivity</li>
                         </ul>
                     </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1263,55 +1419,74 @@
                 <p class="section-subtitle">Showcasing impactful ML engineering projects and technical achievements</p>
             </div>
 
-            <div class="featured-project">
-                <span class="featured-badge">🏆 AMD/Meta Hackathon Winner</span>
-                <h3 class="project-title">Synthetic Data Generation Pipeline for LLM Reasoning</h3>
-                <p class="project-description">
-                    Built a multi-stage synthetic data generation pipeline for the Meta AI/AMD/PyTorch Synthetic Data AI Agents Challenge. 
-                    Designed a relationship-aware system that generates high-quality question-answer pairs for training LLMs on reasoning 
-                    tasks involving character relationships and seating arrangements. Implemented Guided Reinforcement Policy Optimization (GRPO) 
-                    with custom reward functions, structured JSON output enforcement, and identified critical LLM vulnerabilities like alphabetical 
-                    sorting bias. Fine-tuned multiple models (Llama 3 70B, Qwen3-Next 80B MoE, Phi-4) using LoRA, SFT, and GRPO techniques.
-                </p>
-                <div class="project-links" style="margin-top: 1.5rem;">
-                    <a href="https://blog.narain.dev/posts/synthetic-data-hackathon/" class="project-link" target="_blank" rel="noopener noreferrer">
-                        📖 Read Technical Deep Dive →
-                    </a>
-                </div>
-                <div class="project-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">16K+</div>
-                        <div class="stat-label">Lines of Code</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">1st</div>
-                        <div class="stat-label">Place Winner</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">95%+</div>
-                        <div class="stat-label">Test Coverage</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">4+</div>
-                        <div class="stat-label">LLM Models</div>
+            <div class="featured-project window-frame">
+                <div class="window-title-bar">
+                    <span>FEATURED PROJECT</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">−</div>
+                        <div class="window-control maximize">□</div>
+                        <div class="window-control close">×</div>
                     </div>
                 </div>
-                <div class="tech-tags" style="margin-top: 2rem;">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">PyTorch</span>
-                    <span class="tech-tag">GRPO</span>
-                    <span class="tech-tag">LoRA Fine-tuning</span>
-                    <span class="tech-tag">Llama 3</span>
-                    <span class="tech-tag">Qwen3</span>
-                    <span class="tech-tag">Phi-4</span>
-                    <span class="tech-tag">Structured Output</span>
-                    <span class="tech-tag">Reinforcement Learning</span>
+                <div class="window-content">
+                    <span class="featured-badge">🏆 AMD/META HACKATHON WINNER</span>
+                    <h3 class="project-title">Synthetic Data Generation Pipeline for LLM Reasoning</h3>
+                    <p class="project-description">
+                        Built a multi-stage synthetic data generation pipeline for the Meta AI/AMD/PyTorch Synthetic Data AI Agents Challenge. 
+                        Designed a relationship-aware system that generates high-quality question-answer pairs for training LLMs on reasoning 
+                        tasks involving character relationships and seating arrangements. Implemented Guided Reinforcement Policy Optimization (GRPO) 
+                        with custom reward functions, structured JSON output enforcement, and identified critical LLM vulnerabilities like alphabetical 
+                        sorting bias. Fine-tuned multiple models (Llama 3 70B, Qwen3-Next 80B MoE, Phi-4) using LoRA, SFT, and GRPO techniques.
+                    </p>
+                    <div class="project-links" style="margin-top: 1.5rem;">
+                        <a href="https://blog.narain.dev/posts/synthetic-data-hackathon/" class="project-link" target="_blank" rel="noopener noreferrer">
+                            📖 Read Technical Deep Dive →
+                        </a>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">16K+</div>
+                            <div class="stat-label">Lines of Code</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">1st</div>
+                            <div class="stat-label">Place Winner</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">95%+</div>
+                            <div class="stat-label">Test Coverage</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">4+</div>
+                            <div class="stat-label">LLM Models</div>
+                        </div>
+                    </div>
+                    <div class="tech-tags" style="margin-top: 2rem;">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">PyTorch</span>
+                        <span class="tech-tag">GRPO</span>
+                        <span class="tech-tag">LoRA Fine-tuning</span>
+                        <span class="tech-tag">Llama 3</span>
+                        <span class="tech-tag">Qwen3</span>
+                        <span class="tech-tag">Phi-4</span>
+                        <span class="tech-tag">Structured Output</span>
+                        <span class="tech-tag">Reinforcement Learning</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Other Projects -->
             <div class="projects-grid">
-                <div class="project-card">
+                <div class="project-card window-frame">
+                    <div class="window-title-bar">
+                        <span>PROJECT</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>Startup Intelligence Analysis App</h3>
                     <p>
                         Production-ready GraphRAG application for startup intelligence analysis. Built with FastAPI backend, Neo4j graph database, 
@@ -1336,9 +1511,19 @@
                             Live Demo →
                         </a>
                     </div>
+                    </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card window-frame">
+                    <div class="window-title-bar">
+                        <span>PROJECT</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>Wildfire Control RL Agent</h3>
                     <p>
                         Reached Final Four with a reinforcement learning system using Llama 3.2 with LoRA fine-tuning. 
@@ -1357,9 +1542,19 @@
                             GitHub →
                         </a>
                     </div>
+                    </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card window-frame">
+                    <div class="window-title-bar">
+                        <span>PROJECT</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>Graph Processing at Scale</h3>
                     <p>
                         Built large-scale graph data processing pipeline using Neo4j, Terraform, AWS, Docker, Kubernetes, and Kafka. 
@@ -1374,9 +1569,19 @@
                         <span class="tech-tag">Terraform</span>
                         <span class="tech-tag">Graph Algorithms</span>
                     </div>
+                    </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card window-frame">
+                    <div class="window-title-bar">
+                        <span>PROJECT</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>AI-Generated Image Classification</h3>
                     <p>
                         Developed deep learning model to classify AI-generated and real images using ResNet50v2 and EfficientNetV2. 
@@ -1390,9 +1595,19 @@
                         <span class="tech-tag">Transfer Learning</span>
                         <span class="tech-tag">PyTorch</span>
                     </div>
+                    </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card window-frame">
+                    <div class="window-title-bar">
+                        <span>PROJECT</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>Embedded Systems & IoT Integration</h3>
                     <p>
                         Developed C/C++ firmware for ARM Cortex-M and AVR microcontrollers for IoT sensor networks and robotics applications. 
@@ -1405,6 +1620,7 @@
                         <span class="tech-tag">Embedded Systems</span>
                         <span class="tech-tag">IoT</span>
                         <span class="tech-tag">Firmware</span>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -1420,7 +1636,16 @@
             </div>
 
             <div class="skills-grid">
-                <div class="skill-category">
+                <div class="skill-category window-frame">
+                    <div class="window-title-bar">
+                        <span>SKILLS</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>🤖 Machine Learning & AI</h3>
                     <div class="skill-list">
                         <div class="skill-item">PyTorch & TensorFlow</div>
@@ -1431,9 +1656,19 @@
                         <div class="skill-item">CNNs & Deep Learning</div>
                         <div class="skill-item">Model Optimization</div>
                     </div>
+                    </div>
                 </div>
 
-                <div class="skill-category">
+                <div class="skill-category window-frame">
+                    <div class="window-title-bar">
+                        <span>SKILLS</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>⚙️ Backend & Infrastructure</h3>
                     <div class="skill-list">
                         <div class="skill-item">Python (FastAPI, Django, Flask)</div>
@@ -1445,9 +1680,19 @@
                         <div class="skill-item">Neo4j Graph Databases</div>
                         <div class="skill-item">Terraform</div>
                     </div>
+                    </div>
                 </div>
 
-                <div class="skill-category">
+                <div class="skill-category window-frame">
+                    <div class="window-title-bar">
+                        <span>SKILLS</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>🎨 Frontend Development</h3>
                     <div class="skill-list">
                         <div class="skill-item">React & TypeScript</div>
@@ -1458,9 +1703,19 @@
                         <div class="skill-item">Electron.js</div>
                         <div class="skill-item">Responsive Design</div>
                     </div>
+                    </div>
                 </div>
 
-                <div class="skill-category">
+                <div class="skill-category window-frame">
+                    <div class="window-title-bar">
+                        <span>SKILLS</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>💻 Systems & Embedded</h3>
                     <div class="skill-list">
                         <div class="skill-item">C/C++ Programming</div>
@@ -1471,9 +1726,19 @@
                         <div class="skill-item">Interrupt-Driven Programming</div>
                         <div class="skill-item">PC/CPU Architecture</div>
                     </div>
+                    </div>
                 </div>
 
-                <div class="skill-category">
+                <div class="skill-category window-frame">
+                    <div class="window-title-bar">
+                        <span>SKILLS</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>☁️ Cloud & DevOps</h3>
                     <div class="skill-list">
                         <div class="skill-item">AWS (EC2, S3, Cloud Services)</div>
@@ -1484,9 +1749,19 @@
                         <div class="skill-item">Linux/Unix (Ubuntu, CentOS)</div>
                         <div class="skill-item">Shell Scripting (Bash, PowerShell)</div>
                     </div>
+                    </div>
                 </div>
 
-                <div class="skill-category">
+                <div class="skill-category window-frame">
+                    <div class="window-title-bar">
+                        <span>SKILLS</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <h3>🔧 Tools & Technologies</h3>
                     <div class="skill-list">
                         <div class="skill-item">Git, GitHub, Perforce</div>
@@ -1496,6 +1771,7 @@
                         <div class="skill-item">WebSockets, MQTT</div>
                         <div class="skill-item">Testing (Cypress, Jest, Mocha)</div>
                         <div class="skill-item">JTAG Debuggers</div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -1511,7 +1787,16 @@
             </div>
 
             <div class="education-grid">
-                <div class="education-card">
+                <div class="education-card window-frame">
+                    <div class="window-title-bar">
+                        <span>EDUCATION</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <div class="education-degree">Master of Science in Computer Engineering</div>
                     <div class="education-school">Arizona State University</div>
                     <div class="education-details">
@@ -1529,9 +1814,19 @@
                             <span class="coursework-tag">Statistical Machine Learning</span>
                         </div>
                     </div>
+                    </div>
                 </div>
 
-                <div class="education-card">
+                <div class="education-card window-frame">
+                    <div class="window-title-bar">
+                        <span>EDUCATION</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <div class="education-degree">Bachelor of Technology</div>
                     <div class="education-school">PRIST University</div>
                     <div class="education-details">
@@ -1544,6 +1839,7 @@
                         <div class="coursework-list">
                             <span class="coursework-tag">Electronics & Communication Engineering</span>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -1559,7 +1855,16 @@
             </div>
 
             <div class="achievements-grid">
-                <div class="achievement-card">
+                <div class="achievement-card window-frame">
+                    <div class="window-title-bar">
+                        <span>ACHIEVEMENT</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <div class="achievement-year">2025</div>
                     <h3 class="achievement-title">1st Place — Meta AI / AMD / PyTorch Synthetic Data Hackathon</h3>
                     <p class="achievement-description">
@@ -1573,9 +1878,19 @@
                             📖 Read Technical Deep Dive →
                         </a>
                     </div>
+                    </div>
                 </div>
 
-                <div class="achievement-card">
+                <div class="achievement-card window-frame">
+                    <div class="window-title-bar">
+                        <span>ACHIEVEMENT</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">−</div>
+                            <div class="window-control maximize">□</div>
+                            <div class="window-control close">×</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
                     <div class="achievement-year">2025</div>
                     <h3 class="achievement-title">Open Source Contributions — Meta PyTorch OpenEnv</h3>
                     <p class="achievement-description">
@@ -1583,6 +1898,7 @@
                         Collaborated with Meta/PyTorch teams to enhance simulation capabilities and documentation. 
                         Wrote comprehensive technical documentation and unit tests, improving adoption and development workflows.
                     </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1591,7 +1907,16 @@
     <!-- Contact Section -->
     <section id="contact">
         <div class="container">
-            <div class="contact-section">
+            <div class="contact-section window-frame">
+                <div class="window-title-bar">
+                    <span>CONTACT</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">−</div>
+                        <div class="window-control maximize">□</div>
+                        <div class="window-control close">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
                 <h2 class="contact-title">Let's Connect</h2>
                 <p class="contact-description">
                     Currently seeking software engineering co-op opportunities for Spring/Summer 2026 or Summer/Fall 2026. 
@@ -1614,6 +1939,7 @@
                     <a href="/resume.pdf" class="social-link" download aria-label="Download resume PDF">
                         📄 Resume
                     </a>
+                </div>
                 </div>
             </div>
         </div>
