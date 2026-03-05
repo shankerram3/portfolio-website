@@ -4,449 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Building a Wildfire RL Environment: From Hackathon Idea to Open Source Contribution | Ram Harikrishnan</title>
-
     <meta name="description" content="How a hackathon project evolved into a production-ready RL environment for wildfire containment, contributed to Meta's PyTorch OpenEnv framework.">
     <meta name="author" content="Ram Harikrishnan">
-
     <meta property="og:type" content="article">
     <meta property="og:title" content="Building a Wildfire RL Environment: From Hackathon to Open Source">
     <meta property="og:description" content="Training AI agents to fight wildfires — from hackathon prototype to Meta PyTorch OpenEnv contribution.">
     <meta property="og:url" content="https://ramharikrishnan.dev/blog-wildfire-rl.html">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
-            --bg-primary: #e8f4f8;
-            --bg-secondary: #d4e8f0;
-            --bg-card: #ffffff;
-            --accent-primary: #7c3aed;
-            --accent-secondary: #a855f7;
-            --accent-tertiary: #ec4899;
-            --accent-quaternary: #06b6d4;
-            --text-primary: #2c3e50;
-            --text-secondary: #5a6c7d;
-            --border-color: #b8d4e3;
-            --grid-color: rgba(124, 58, 237, 0.1);
+            --bg-primary: #0a0a0a; --bg-secondary: #141414; --bg-card: #1a1a1a;
+            --accent-primary: #00d4ff; --accent-secondary: #7c3aed;
+            --text-primary: #ffffff; --text-secondary: #a0a0a0; --border-color: #2a2a2a;
         }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+        a { color: var(--accent-primary); text-decoration: none; transition: color 0.3s; }
+        a:hover { color: var(--accent-secondary); }
 
-        body {
-            font-family: 'VT323', 'Courier New', monospace;
-            background-color: var(--bg-primary);
-            background-image:
-                linear-gradient(var(--grid-color) 2px, transparent 2px),
-                linear-gradient(90deg, var(--grid-color) 2px, transparent 2px);
-            background-size: 40px 40px;
-            color: var(--text-primary);
-            line-height: 1.6;
-            image-rendering: pixelated;
-        }
+        nav { position: sticky; top: 0; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .nav-inner { max-width: 900px; margin: 0 auto; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+        .back-link { color: var(--text-secondary); font-weight: 500; transition: color 0.3s; }
+        .back-link:hover { color: var(--accent-primary); }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+        .article-hero { padding: 5rem 0 3rem; text-align: center; position: relative; }
+        .article-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 30% 50%, rgba(0, 212, 255, 0.06) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 50%); pointer-events: none; }
+        .article-badges { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+        .badge { display: inline-block; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: var(--text-primary); padding: 0.4rem 1.2rem; border-radius: 50px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .article-title { font-size: 2.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--text-primary), var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .article-subtitle { font-size: 1.2rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto; line-height: 1.8; }
 
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 4px solid var(--accent-primary);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        .article-content { padding: 2rem 0 6rem; }
+        .content-section { background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary)); border-radius: 20px; padding: 3rem; border: 1px solid var(--border-color); margin-bottom: 2.5rem; position: relative; overflow: hidden; }
+        .content-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); }
+        .content-section h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--text-primary); }
+        .content-section h3 { font-size: 1.3rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--accent-primary); }
+        .content-section p { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.9; margin-bottom: 1.2rem; }
+        .content-section ul, .content-section ol { margin: 1rem 0 1.5rem 1.5rem; list-style: none; }
+        .content-section li { color: var(--text-secondary); margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative; font-size: 1.1rem; line-height: 1.8; }
+        .content-section li::before { content: '▹'; position: absolute; left: 0; color: var(--accent-primary); font-size: 1.2rem; }
+        .content-section strong { color: var(--text-primary); }
 
-        .header-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin: 2.5rem 0; }
+        .stat-card { text-align: center; padding: 2rem 1.5rem; background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card)); border-radius: 16px; border: 1px solid var(--border-color); transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--accent-primary); box-shadow: 0 10px 25px rgba(0, 212, 255, 0.15); }
+        .stat-number { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+        .stat-label { color: var(--text-secondary); font-size: 0.95rem; font-weight: 500; }
 
-        .logo {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.2rem;
-            color: var(--accent-primary);
-            text-decoration: none;
-            border: 5px solid var(--accent-primary);
-            padding: 0.5rem 1rem;
-            box-shadow: 4px 4px 0px var(--accent-primary);
-        }
+        .code-block { background: #0d1117; color: #e6edf3; padding: 1.5rem; margin: 1.5rem 0; border-radius: 12px; border: 1px solid var(--border-color); overflow-x: auto; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9rem; line-height: 1.7; }
+        code { font-family: 'SF Mono', 'Fira Code', monospace; background: rgba(0, 212, 255, 0.1); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; color: var(--accent-primary); }
 
-        .logo:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px var(--accent-primary);
-        }
+        .highlight-box { background: rgba(0, 212, 255, 0.05); border-left: 4px solid var(--accent-primary); padding: 1.5rem 2rem; margin: 2rem 0; border-radius: 0 12px 12px 0; }
+        .highlight-box p { margin-bottom: 0.5rem; }
 
-        .back-link {
-            font-family: 'VT323', monospace;
-            font-size: 1.4rem;
-            color: var(--accent-primary);
-            text-decoration: none;
-            border: 3px solid var(--accent-primary);
-            padding: 0.4rem 1rem;
-            transition: all 0.1s ease;
-        }
-
-        .back-link:hover {
-            background: var(--accent-primary);
-            color: white;
-        }
-
-        .article-hero {
-            padding: 4rem 0 2rem;
-            text-align: center;
-        }
-
-        .article-meta {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
-
-        .meta-badge {
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
-            background: var(--accent-primary);
-            color: white;
-            padding: 0.3rem 1rem;
-            border: 3px solid var(--text-primary);
-            box-shadow: 3px 3px 0px var(--text-primary);
-        }
-
-        .article-title {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.8rem;
-            line-height: 1.8;
-            color: var(--text-primary);
-            text-shadow: 3px 3px 0px rgba(124, 58, 237, 0.2);
-            margin-bottom: 1.5rem;
-        }
-
-        .article-subtitle {
-            font-size: 1.6rem;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .article-content {
-            padding: 2rem 0 6rem;
-        }
-
-        .content-card {
-            border: 6px solid var(--text-primary);
-            box-shadow: 8px 8px 0px var(--text-primary);
-            background: var(--bg-card);
-            margin-bottom: 3rem;
-        }
-
-        .card-header {
-            background: #64b5f6;
-            padding: 0.8rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 4px solid var(--text-primary);
-        }
-
-        .card-header span {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.7rem;
-            color: var(--text-primary);
-        }
-
-        .window-controls {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .window-control {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 3px solid var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: bold;
-        }
-
-        .minimize { background: #ffd54f; }
-        .maximize { background: #81c784; }
-        .close { background: #e57373; }
-
-        .card-body {
-            padding: 2.5rem;
-            background: #fff9c4;
-        }
-
-        .card-body h2 {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1rem;
-            color: var(--accent-primary);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .card-body h3 {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.8rem;
-            color: var(--text-primary);
-            margin: 2rem 0 1rem;
-            line-height: 1.6;
-        }
-
-        .card-body p {
-            font-size: 1.4rem;
-            line-height: 1.8;
-            margin-bottom: 1.2rem;
-            color: var(--text-primary);
-        }
-
-        .card-body ul, .card-body ol {
-            font-size: 1.4rem;
-            line-height: 1.8;
-            margin: 1rem 0 1.5rem 2rem;
-        }
-
-        .card-body li {
-            margin-bottom: 0.5rem;
-        }
-
-        .card-body code {
-            font-family: 'VT323', monospace;
-            background: rgba(124, 58, 237, 0.1);
-            padding: 0.1rem 0.4rem;
-            border: 2px solid var(--border-color);
-            font-size: 1.3rem;
-        }
-
-        .code-block {
-            background: #1e1e2e;
-            color: #cdd6f4;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border: 4px solid var(--text-primary);
-            box-shadow: 4px 4px 0px var(--text-primary);
-            overflow-x: auto;
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
-            line-height: 1.6;
-        }
-
-        .code-block .keyword { color: #cba6f7; }
-        .code-block .string { color: #a6e3a1; }
-        .code-block .comment { color: #6c7086; }
-        .code-block .function { color: #89b4fa; }
-
-        .highlight-box {
-            background: rgba(124, 58, 237, 0.08);
-            border-left: 6px solid var(--accent-primary);
-            padding: 1.5rem 2rem;
-            margin: 2rem 0;
-            border: 4px solid var(--accent-primary);
-        }
-
-        .highlight-box p {
-            margin-bottom: 0.5rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 1.5rem;
-            background: var(--bg-card);
-            border: 4px solid var(--text-primary);
-            box-shadow: 4px 4px 0px var(--text-primary);
-        }
-
-        .stat-number {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.4rem;
-            color: var(--accent-primary);
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-        }
-
-        .tech-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin: 1.5rem 0;
-        }
-
-        .tech-tag {
-            font-family: 'VT323', monospace;
-            font-size: 1.1rem;
-            padding: 0.3rem 0.8rem;
-            background: white;
-            border: 3px solid var(--text-primary);
-            box-shadow: 3px 3px 0px var(--text-primary);
-            color: var(--text-primary);
-        }
+        .tech-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.5rem 0; }
+        .tech-tag { background: rgba(0, 212, 255, 0.1); color: var(--accent-primary); padding: 0.5rem 1.1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(0, 212, 255, 0.2); }
 
         /* CTA Links */
-        .cta-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 2rem 0;
-        }
+        .cta-links { display: flex; flex-wrap: wrap; gap: 1rem; margin: 2rem 0; }
+        .cta-link { padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; display: inline-block; }
+        .cta-link.primary { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: var(--text-primary); }
+        .cta-link.secondary { background: transparent; color: var(--text-primary); border: 2px solid var(--accent-primary); }
+        .cta-link:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3); color: var(--text-primary); }
 
-        .cta-link {
-            font-family: 'VT323', monospace;
-            font-size: 1.3rem;
-            padding: 0.6rem 1.2rem;
-            text-decoration: none;
-            border: 4px solid var(--text-primary);
-            box-shadow: 4px 4px 0px var(--text-primary);
-            transition: all 0.1s ease;
-            color: var(--text-primary);
-            background: white;
-        }
+        /* Table */
+        .data-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+        .data-table th, .data-table td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 1rem; }
+        .data-table th { color: var(--accent-primary); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        .data-table td { color: var(--text-secondary); }
+        .data-table tr:hover td { color: var(--text-primary); }
 
-        .cta-link:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px var(--text-primary);
-        }
+        /* Fire grid */
+        .fire-grid-wrapper { text-align: center; margin: 2rem 0; }
+        .fire-grid { display: inline-grid; grid-template-columns: repeat(8, 1fr); gap: 3px; padding: 1rem; background: #0d1117; border-radius: 12px; border: 1px solid var(--border-color); }
+        .fire-cell { width: 38px; height: 38px; border-radius: 4px; }
+        .cell-fuel { background: #22543d; }
+        .cell-burning { background: #e53e3e; animation: burn 0.6s infinite alternate; }
+        .cell-ash { background: #4a5568; }
+        .cell-firebreak { background: #744210; }
+        .cell-water { background: #2b6cb0; }
+        @keyframes burn { from { background: #e53e3e; } to { background: #ed8936; } }
+        .legend { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-size: 0.9rem; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 3px; }
 
-        .cta-link.primary {
-            background: var(--accent-primary);
-            color: white;
-        }
-
-        /* Training table */
-        .training-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-family: 'VT323', monospace;
-            font-size: 1.3rem;
-        }
-
-        .training-table th, .training-table td {
-            border: 3px solid var(--text-primary);
-            padding: 0.8rem 1rem;
-            text-align: left;
-        }
-
-        .training-table th {
-            background: var(--accent-primary);
-            color: white;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.6rem;
-        }
-
-        .training-table tr:nth-child(even) {
-            background: rgba(124, 58, 237, 0.05);
-        }
-
-        /* Architecture diagram */
-        .architecture-diagram {
-            background: #1e1e2e;
-            color: #cdd6f4;
-            padding: 2rem;
-            margin: 2rem 0;
-            border: 4px solid var(--text-primary);
-            box-shadow: 4px 4px 0px var(--text-primary);
-            font-family: 'VT323', monospace;
-            font-size: 1.1rem;
-            line-height: 1.4;
-            overflow-x: auto;
-            white-space: pre;
-        }
-
-        /* Grid visualization */
-        .fire-grid {
-            display: inline-grid;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 3px;
-            margin: 1.5rem auto;
-            padding: 1rem;
-            background: #1e1e2e;
-            border: 4px solid var(--text-primary);
-            box-shadow: 4px 4px 0px var(--text-primary);
-        }
-
-        .fire-cell {
-            width: 40px;
-            height: 40px;
-            border: 2px solid #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-        }
-
-        .cell-fuel { background: #2d5a27; }
-        .cell-burning { background: #d63031; animation: burn 0.6s infinite alternate; }
-        .cell-ash { background: #636e72; }
-        .cell-firebreak { background: #6d4c41; }
-        .cell-water { background: #0984e3; }
-
-        @keyframes burn {
-            from { background: #d63031; }
-            to { background: #e17055; }
-        }
-
-        footer {
-            background: var(--text-primary);
-            color: var(--bg-primary);
-            text-align: center;
-            padding: 2rem;
-            font-size: 1.2rem;
-            border-top: 6px solid var(--accent-primary);
-        }
-
-        footer a {
-            color: var(--accent-quaternary);
-            text-decoration: none;
-        }
+        footer { text-align: center; padding: 3rem 2rem; color: var(--text-secondary); border-top: 1px solid var(--border-color); }
+        footer a { color: var(--accent-primary); }
 
         @media (max-width: 768px) {
-            .article-title { font-size: 1.2rem; }
-            .card-body { padding: 1.5rem; }
-            .card-body h2 { font-size: 0.85rem; }
+            .article-title { font-size: 2rem; }
+            .content-section { padding: 2rem; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .fire-cell { width: 30px; height: 30px; font-size: 1rem; }
+            .fire-cell { width: 28px; height: 28px; }
             .cta-links { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-inner">
+    <nav>
+        <div class="nav-inner">
             <a href="index.html" class="logo">RH</a>
-            <a href="index.html#blog" class="back-link">&larr; Back to Home</a>
+            <a href="index.html#blog" class="back-link">← Back to Home</a>
         </div>
-    </header>
+    </nav>
 
     <div class="container">
         <div class="article-hero">
-            <div class="article-meta">
-                <span class="meta-badge">BLOG POST</span>
-                <span class="meta-badge" style="background: #e17055;">OPEN SOURCE</span>
-                <span class="meta-badge" style="background: var(--accent-tertiary);">META / PYTORCH</span>
+            <div class="article-badges">
+                <span class="badge">Blog Post</span>
+                <span class="badge">Open Source</span>
+                <span class="badge">Meta / PyTorch</span>
             </div>
             <h1 class="article-title">Building a Wildfire RL Environment: From Hackathon Idea to Open Source Contribution</h1>
             <p class="article-subtitle">How a hackathon prototype became a production-ready reinforcement learning environment in Meta's PyTorch OpenEnv framework.</p>
@@ -454,287 +122,132 @@
 
         <div class="article-content">
 
-            <!-- Introduction -->
-            <div class="content-card">
-                <div class="card-header">
-                    <span>INTRODUCTION</span>
-                    <div class="window-controls">
-                        <div class="window-control minimize">&minus;</div>
-                        <div class="window-control maximize">&square;</div>
-                        <div class="window-control close">&times;</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h2>What If AI Could Learn to Fight Wildfires?</h2>
-                    <p>
-                        During a recent hackathon, I had the opportunity to explore an idea that combined my interests in reinforcement learning and real-world applications: what if we could train AI agents to learn wildfire containment strategies?
-                    </p>
-                    <p>
-                        That hackathon project has now evolved into a full-fledged open source contribution to <strong>Meta's PyTorch OpenEnv framework</strong>&mdash;a complete reinforcement learning environment for testing autonomous wildfire control algorithms.
-                    </p>
-                    <p>
-                        Wildfires represent a compelling test case for RL: they're dynamic, resource-constrained, and have clear real-world relevance as climate change intensifies fire seasons globally. What started as a rapid prototype has grown into a production-ready environment that models dynamic fire spread, resource constraints, time pressure, and strategic decision-making.
-                    </p>
-
-                    <div class="cta-links">
-                        <a href="https://huggingface.co/spaces/shankerram3/wildfire_env" class="cta-link primary" target="_blank" rel="noopener noreferrer">Try the Environment</a>
-                        <a href="https://huggingface.co/spaces/shankerram3/wildfire-game" class="cta-link" target="_blank" rel="noopener noreferrer">Play the Game</a>
-                        <a href="https://github.com/shankerram3/OpenEnv" class="cta-link" target="_blank" rel="noopener noreferrer">Source Code</a>
-                        <a href="https://tinyurl.com/documentationWildfireEnv" class="cta-link" target="_blank" rel="noopener noreferrer">Documentation</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-number">27</span>
-                    <span class="stat-label">Commits to PR</span>
+                    <div class="stat-number">27</div>
+                    <div class="stat-label">Commits to PR</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number">68%</span>
-                    <span class="stat-label">AI Success Rate</span>
+                    <div class="stat-number">68%</div>
+                    <div class="stat-label">AI Success Rate</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number">1,000+</span>
-                    <span class="stat-label">Training Episodes</span>
+                    <div class="stat-number">1,000+</div>
+                    <div class="stat-label">Training Episodes</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number">PR #132</span>
-                    <span class="stat-label">OpenEnv Contrib</span>
+                    <div class="stat-number">PR #132</div>
+                    <div class="stat-label">OpenEnv Contrib</div>
                 </div>
             </div>
 
-            <!-- Visualization -->
-            <div class="content-card">
-                <div class="card-header">
-                    <span>SIMULATION GRID</span>
-                    <div class="window-controls">
-                        <div class="window-control minimize">&minus;</div>
-                        <div class="window-control maximize">&square;</div>
-                        <div class="window-control close">&times;</div>
-                    </div>
-                </div>
-                <div class="card-body" style="text-align: center;">
-                    <h2>Fire Spread Visualization</h2>
-                    <p>The environment simulates fire on a configurable grid. Each cell has a state that changes over time based on physics-informed rules:</p>
+            <div class="content-section">
+                <h2>What If AI Could Learn to Fight Wildfires?</h2>
+                <p>
+                    During a recent hackathon, I had the opportunity to explore an idea that combined my interests in reinforcement learning and real-world applications: what if we could train AI agents to learn wildfire containment strategies?
+                </p>
+                <p>
+                    That hackathon project has now evolved into a full-fledged open source contribution to <strong>Meta's PyTorch OpenEnv framework</strong> — a complete reinforcement learning environment for testing autonomous wildfire control algorithms.
+                </p>
+                <p>
+                    Wildfires represent a compelling test case for RL: they're dynamic, resource-constrained, and have clear real-world relevance as climate change intensifies fire seasons globally. What started as a rapid prototype has grown into a production-ready environment that models dynamic fire spread, resource constraints, time pressure, and strategic decision-making.
+                </p>
 
+                <div class="cta-links">
+                    <a href="https://huggingface.co/spaces/shankerram3/wildfire_env" class="cta-link primary" target="_blank" rel="noopener noreferrer">Try the Environment</a>
+                    <a href="https://huggingface.co/spaces/shankerram3/wildfire-game" class="cta-link secondary" target="_blank" rel="noopener noreferrer">Play the Game</a>
+                    <a href="https://github.com/shankerram3/OpenEnv" class="cta-link secondary" target="_blank" rel="noopener noreferrer">Source Code</a>
+                    <a href="https://tinyurl.com/documentationWildfireEnv" class="cta-link secondary" target="_blank" rel="noopener noreferrer">Documentation</a>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2>Fire Spread Visualization</h2>
+                <p>The environment simulates fire on a configurable grid. Each cell has a state that changes over time based on physics-informed rules:</p>
+
+                <div class="fire-grid-wrapper">
                     <div class="fire-grid">
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-burning"></div>
-                        <div class="fire-cell cell-burning"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-burning"></div>
-                        <div class="fire-cell cell-ash"></div>
-                        <div class="fire-cell cell-ash"></div>
-                        <div class="fire-cell cell-burning"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-water"></div>
-                        <div class="fire-cell cell-water"></div>
-                        <div class="fire-cell cell-burning"></div>
-                        <div class="fire-cell cell-ash"></div>
-                        <div class="fire-cell cell-ash"></div>
-                        <div class="fire-cell cell-ash"></div>
-                        <div class="fire-cell cell-burning"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-firebreak"></div>
-                        <div class="fire-cell cell-water"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-burning"></div>
-                        <div class="fire-cell cell-ash"></div>
-                        <div class="fire-cell cell-ash"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-firebreak"></div>
-                        <div class="fire-cell cell-firebreak"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-burning"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-firebreak"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
-                        <div class="fire-cell cell-fuel"></div>
+                        <div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-burning"></div><div class="fire-cell cell-burning"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div>
+                        <div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-burning"></div><div class="fire-cell cell-ash"></div><div class="fire-cell cell-ash"></div><div class="fire-cell cell-burning"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div>
+                        <div class="fire-cell cell-water"></div><div class="fire-cell cell-water"></div><div class="fire-cell cell-burning"></div><div class="fire-cell cell-ash"></div><div class="fire-cell cell-ash"></div><div class="fire-cell cell-ash"></div><div class="fire-cell cell-burning"></div><div class="fire-cell cell-fuel"></div>
+                        <div class="fire-cell cell-firebreak"></div><div class="fire-cell cell-water"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-burning"></div><div class="fire-cell cell-ash"></div><div class="fire-cell cell-ash"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div>
+                        <div class="fire-cell cell-firebreak"></div><div class="fire-cell cell-firebreak"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-burning"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div>
+                        <div class="fire-cell cell-firebreak"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div>
+                        <div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div>
+                        <div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div><div class="fire-cell cell-fuel"></div>
                     </div>
-
-                    <div class="tech-tags" style="justify-content: center;">
-                        <span class="tech-tag" style="background: #2d5a27; color: white;">Fuel</span>
-                        <span class="tech-tag" style="background: #d63031; color: white;">Burning</span>
-                        <span class="tech-tag" style="background: #636e72; color: white;">Ash</span>
-                        <span class="tech-tag" style="background: #6d4c41; color: white;">Firebreak</span>
-                        <span class="tech-tag" style="background: #0984e3; color: white;">Water</span>
+                    <div class="legend">
+                        <div class="legend-item"><div class="legend-dot" style="background:#22543d;"></div> Fuel</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#e53e3e;"></div> Burning</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#4a5568;"></div> Ash</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#744210;"></div> Firebreak</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#2b6cb0;"></div> Water</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Environment Design -->
-            <div class="content-card">
-                <div class="card-header">
-                    <span>ENVIRONMENT DESIGN</span>
-                    <div class="window-controls">
-                        <div class="window-control minimize">&minus;</div>
-                        <div class="window-control maximize">&square;</div>
-                        <div class="window-control close">&times;</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h2>Physics-Informed Fire Simulation</h2>
-                    <p>
-                        Rather than creating arbitrary game mechanics, I wanted the environment to reflect actual fire behavior. The simulation incorporates principles from established fire science research:
-                    </p>
-                    <ul>
-                        <li><strong>8-directional fire spread:</strong> Fire propagates to adjacent cells using probability distributions</li>
-                        <li><strong>Wind effects:</strong> Wind accelerates spread in the downwind direction (2x), creating realistic asymmetric propagation. Against-wind spread drops to 0.5x.</li>
-                        <li><strong>Humidity suppression:</strong> High humidity reduces ignition probability, modeling natural fire resistance</li>
-                        <li><strong>Fuel dynamics:</strong> Cells transition through states (fuel &rarr; burning &rarr; ash) with configurable burn timers of 3 ticks</li>
-                        <li><strong>Diagonal penalty:</strong> 0.6x spread probability for diagonal neighbors, reflecting slower real-world diagonal propagation</li>
-                    </ul>
-                    <p>
-                        This approach draws inspiration from the <strong>Rothermel Surface Fire Spread Model</strong> (USDA Forest Service) and <strong>MITRE's SimFire project</strong>&mdash;an open-source wildfire simulation designed for testing autonomous systems.
-                    </p>
+            <div class="content-section">
+                <h2>Physics-Informed Fire Simulation</h2>
+                <p>
+                    Rather than creating arbitrary game mechanics, I wanted the environment to reflect actual fire behavior. The simulation incorporates principles from established fire science research:
+                </p>
+                <ul>
+                    <li><strong>8-directional fire spread:</strong> Fire propagates to adjacent cells using probability distributions</li>
+                    <li><strong>Wind effects:</strong> Wind accelerates spread in the downwind direction (2x), creating realistic asymmetric propagation. Against-wind spread drops to 0.5x.</li>
+                    <li><strong>Humidity suppression:</strong> High humidity reduces ignition probability, modeling natural fire resistance</li>
+                    <li><strong>Fuel dynamics:</strong> Cells transition through states (fuel → burning → ash) with configurable burn timers of 3 ticks</li>
+                    <li><strong>Diagonal penalty:</strong> 0.6x spread probability for diagonal neighbors, reflecting slower real-world diagonal propagation</li>
+                </ul>
+                <p>
+                    This approach draws inspiration from the <strong>Rothermel Surface Fire Spread Model</strong> (USDA Forest Service) and <strong>MITRE's SimFire project</strong> — an open-source wildfire simulation designed for testing autonomous systems.
+                </p>
 
-                    <h3>Standard RL Interface</h3>
-                    <p>The environment follows the Gymnasium API standard, making it compatible with popular RL libraries:</p>
+                <h3>Standard RL Interface</h3>
+                <div class="code-block"><span style="color:#ff7b72">from</span> envs.wildfire_env <span style="color:#ff7b72">import</span> WildfireAction, WildfireEnv
 
-                    <div class="code-block">
-<span class="keyword">from</span> envs.wildfire_env <span class="keyword">import</span> WildfireAction, WildfireEnv
+<span style="color:#8b949e"># Connect to the wildfire environment</span>
+env = WildfireEnv(<span style="color:#a5d6ff">server_url="http://localhost:8000"</span>)
+obs, info = env.<span style="color:#d2a8ff">reset</span>()
 
-<span class="comment"># Connect to the wildfire environment</span>
-env = WildfireEnv(<span class="string">server_url="http://localhost:8000"</span>)
-obs, info = env.<span class="function">reset</span>()
+<span style="color:#8b949e"># Agent loop</span>
+<span style="color:#ff7b72">for</span> step <span style="color:#ff7b72">in</span> <span style="color:#d2a8ff">range</span>(max_steps):
+    action = WildfireAction(<span style="color:#a5d6ff">action="water"</span>, x=<span style="color:#79c0ff">5</span>, y=<span style="color:#79c0ff">5</span>)
+    obs, reward, done, truncated, info = env.<span style="color:#d2a8ff">step</span>(action)
+    <span style="color:#ff7b72">if</span> done:
+        <span style="color:#ff7b72">break</span>
 
-<span class="comment"># Agent loop</span>
-<span class="keyword">for</span> step <span class="keyword">in</span> <span class="function">range</span>(max_steps):
-    action = WildfireAction(<span class="string">action="water"</span>, x=5, y=5)
-    obs, reward, done, truncated, info = env.<span class="function">step</span>(action)
-    <span class="keyword">if</span> done:
-        <span class="keyword">break</span>
-
-env.<span class="function">close</span>()</div>
-
-                    <p>Agents choose from three action types: <code>water</code> (suppress fires), <code>break</code> (build firebreaks), or <code>wait</code> (let dynamics play out). Each action targets specific grid coordinates, and the reward function shapes behavior toward containment while penalizing resource waste.</p>
-                </div>
+env.<span style="color:#d2a8ff">close</span>()</div>
+                <p>Agents choose from three action types: <code>water</code> (suppress fires), <code>break</code> (build firebreaks), or <code>wait</code> (let dynamics play out). Each action targets specific grid coordinates.</p>
             </div>
 
-            <!-- Reward Design -->
-            <div class="content-card">
-                <div class="card-header">
-                    <span>REWARD ENGINEERING</span>
-                    <div class="window-controls">
-                        <div class="window-control minimize">&minus;</div>
-                        <div class="window-control maximize">&square;</div>
-                        <div class="window-control close">&times;</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h2>Shaping Agent Behavior Through Rewards</h2>
-                    <p>Getting the reward function right was one of the trickiest parts. Too sparse and the agent never learns; too dense and it exploits loopholes. Here's the structure I landed on:</p>
+            <div class="content-section">
+                <h2>Shaping Agent Behavior Through Rewards</h2>
+                <p>Getting the reward function right was one of the trickiest parts. Too sparse and the agent never learns; too dense and it exploits loopholes:</p>
 
-                    <table class="training-table">
-                        <tr>
-                            <th>Signal</th>
-                            <th>Reward</th>
-                            <th>Purpose</th>
-                        </tr>
-                        <tr>
-                            <td>Extinguish fire</td>
-                            <td>+0.25</td>
-                            <td>Reward direct containment</td>
-                        </tr>
-                        <tr>
-                            <td>Effective firebreak</td>
-                            <td>+0.15</td>
-                            <td>Reward proactive prevention</td>
-                        </tr>
-                        <tr>
-                            <td>Fire spreads</td>
-                            <td>-0.15</td>
-                            <td>Penalize uncontrolled growth</td>
-                        </tr>
-                        <tr>
-                            <td>Cell burns to ash</td>
-                            <td>-0.05</td>
-                            <td>Penalize permanent damage</td>
-                        </tr>
-                        <tr>
-                            <td>Wasteful action</td>
-                            <td>-0.05</td>
-                            <td>Penalize resource waste</td>
-                        </tr>
-                        <tr>
-                            <td>Each timestep</td>
-                            <td>-0.01</td>
-                            <td>Encourage efficiency</td>
-                        </tr>
-                        <tr>
-                            <td>Fire contained (end)</td>
-                            <td>+0.5 to +1.0</td>
-                            <td>Big bonus for success</td>
-                        </tr>
-                    </table>
-
-                    <p>
-                        The end-of-episode bonus scales with the ratio of saved cells, so agents that contain fire early with minimal damage get the highest rewards. This encourages both speed and precision.
-                    </p>
-                </div>
+                <table class="data-table">
+                    <tr><th>Signal</th><th>Reward</th><th>Purpose</th></tr>
+                    <tr><td>Extinguish fire</td><td>+0.25</td><td>Reward direct containment</td></tr>
+                    <tr><td>Effective firebreak</td><td>+0.15</td><td>Reward proactive prevention</td></tr>
+                    <tr><td>Fire spreads</td><td>-0.15</td><td>Penalize uncontrolled growth</td></tr>
+                    <tr><td>Cell burns to ash</td><td>-0.05</td><td>Penalize permanent damage</td></tr>
+                    <tr><td>Wasteful action</td><td>-0.05</td><td>Penalize resource waste</td></tr>
+                    <tr><td>Each timestep</td><td>-0.01</td><td>Encourage efficiency</td></tr>
+                    <tr><td>Fire contained (end)</td><td>+0.5 to +1.0</td><td>Big bonus for success</td></tr>
+                </table>
             </div>
 
-            <!-- Training -->
-            <div class="content-card">
-                <div class="card-header">
-                    <span>TRAINING AI AGENTS</span>
-                    <div class="window-controls">
-                        <div class="window-control minimize">&minus;</div>
-                        <div class="window-control maximize">&square;</div>
-                        <div class="window-control close">&times;</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h2>From Expert Demonstrations to Learned Policies</h2>
-                    <p>
-                        Beyond serving as an RL environment, I developed a complete training pipeline demonstrating how AI agents can learn wildfire containment through supervised fine-tuning.
-                    </p>
+            <div class="content-section">
+                <h2>Training AI Agents: From Expert Demonstrations to Learned Policies</h2>
 
-                    <h3>The Pipeline</h3>
-                    <ol>
-                        <li><strong>Expert Demonstrations:</strong> A rule-based policy generates 1,000+ optimal demonstrations&mdash;prioritizing nearest fires, considering wind direction, managing resources efficiently.</li>
-                        <li><strong>Supervised Fine-Tuning:</strong> Llama 3.2 1B Instruct (1.23B params) learns from expert strategies using LoRA with rank 128, targeting all attention and MLP projection layers (~134M trainable parameters).</li>
-                        <li><strong>Interactive Evaluation:</strong> The trained model competes against humans in a Gradio-based game interface.</li>
-                    </ol>
+                <h3>The Pipeline</h3>
+                <ol>
+                    <li><strong>Expert Demonstrations:</strong> A rule-based policy generates 1,000+ optimal demonstrations — prioritizing nearest fires, considering wind direction, managing resources efficiently.</li>
+                    <li><strong>Supervised Fine-Tuning:</strong> Llama 3.2 1B Instruct (1.23B params) learns from expert strategies using LoRA with rank 128, targeting all attention and MLP projection layers (~134M trainable parameters).</li>
+                    <li><strong>Interactive Evaluation:</strong> The trained model competes against humans in a Gradio-based game interface.</li>
+                </ol>
 
-                    <h3>Training Configuration</h3>
-                    <div class="code-block">
-<span class="comment"># Key hyperparameters</span>
+                <h3>Training Configuration</h3>
+                <div class="code-block"><span style="color:#8b949e"># Key hyperparameters</span>
 Base Model:       Llama 3.2 1B Instruct
 LoRA Rank:        128 (alpha: 128)
 Learning Rate:    2e-4 (cosine schedule)
@@ -745,154 +258,92 @@ Hardware:         AMD MI100 GPU
 Training Time:    ~6-8 hours
 GPU Memory:       6.10GB allocated</div>
 
-                    <h3>Results: 50 Evaluation Episodes</h3>
-                    <table class="training-table">
-                        <tr>
-                            <th>Metric</th>
-                            <th>Value</th>
-                        </tr>
-                        <tr>
-                            <td>Mean Reward</td>
-                            <td>-4.19 &plusmn; 6.34</td>
-                        </tr>
-                        <tr>
-                            <td>Median Reward</td>
-                            <td>+1.67 (positive!)</td>
-                        </tr>
-                        <tr>
-                            <td>Success Rate</td>
-                            <td>68% (vs 45% heuristic)</td>
-                        </tr>
-                        <tr>
-                            <td>Avg Episode Length</td>
-                            <td>19.6 steps</td>
-                        </tr>
-                    </table>
+                <h3>Results: 50 Evaluation Episodes</h3>
+                <table class="data-table">
+                    <tr><th>Metric</th><th>Value</th></tr>
+                    <tr><td>Mean Reward</td><td>-4.19 ± 6.34</td></tr>
+                    <tr><td>Median Reward</td><td>+1.67 (positive)</td></tr>
+                    <tr><td>Success Rate</td><td>68% (vs 45% heuristic)</td></tr>
+                    <tr><td>Avg Episode Length</td><td>19.6 steps</td></tr>
+                </table>
 
-                    <h3>What the Agent Learned</h3>
-                    <p>
-                        The model independently developed a <strong>firebreak-heavy strategy</strong> (64.1% firebreaks, 28.3% water, 7.6% wait)&mdash;more conservative than the expert policy, which is actually safer for real-world applications. It achieved 75% of expert performance using pure supervised learning.
-                    </p>
+                <h3>What the Agent Learned</h3>
+                <p>
+                    The model independently developed a <strong>firebreak-heavy strategy</strong> (64.1% firebreaks, 28.3% water, 7.6% wait) — more conservative than the expert policy, which is actually safer for real-world applications. It achieved 75% of expert performance using pure supervised learning.
+                </p>
 
-                    <div class="highlight-box">
-                        <p><strong>Key Insight:</strong> The agent learned that prevention (firebreaks) is more effective than reaction (water). This mirrors real-world firefighting wisdom&mdash;containment lines save more forest than direct suppression.</p>
-                    </div>
+                <div class="highlight-box">
+                    <p><strong>Key Insight:</strong> The agent learned that prevention (firebreaks) is more effective than reaction (water). This mirrors real-world firefighting wisdom — containment lines save more forest than direct suppression.</p>
+                </div>
 
-                    <h3>Training Convergence</h3>
-                    <div class="code-block">
-Epoch  1:  loss=0.245  |  eval_loss=0.198
+                <h3>Training Convergence</h3>
+                <div class="code-block">Epoch  1:  loss=0.245  |  eval_loss=0.198
 Epoch  5:  loss=0.112  |  eval_loss=0.145
 Epoch 10:  loss=0.078  |  eval_loss=0.134
 Epoch 20:  loss=0.039  |  eval_loss=0.135  (slight overfit)
 
 Final avg loss: 0.104
 Speed: 175.2 samples/sec</div>
+            </div>
+
+            <div class="content-section">
+                <h2>Play Against the AI</h2>
+                <p>
+                    I built a Gradio-based web interface where you can challenge the trained model head-to-head. The game features side-by-side visualization, real-time AI reasoning display, score tracking, and resource management for both players.
+                </p>
+                <div class="cta-links" style="justify-content: center;">
+                    <a href="https://huggingface.co/spaces/shankerram3/wildfire-game" class="cta-link primary" target="_blank" rel="noopener noreferrer">Play the Game</a>
                 </div>
             </div>
 
-            <!-- Interactive Game -->
-            <div class="content-card">
-                <div class="card-header">
-                    <span>HUMAN vs AI</span>
-                    <div class="window-controls">
-                        <div class="window-control minimize">&minus;</div>
-                        <div class="window-control maximize">&square;</div>
-                        <div class="window-control close">&times;</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h2>Play Against the AI</h2>
-                    <p>
-                        I built a Gradio-based web interface where you can challenge the trained model head-to-head. The game features side-by-side visualization, real-time AI reasoning display, score tracking, and resource management for both players.
-                    </p>
-                    <p>
-                        The game demonstrates how LLMs can learn complex spatial reasoning and strategic planning through supervised fine-tuning on expert demonstrations.
-                    </p>
+            <div class="content-section">
+                <h2>Contributing to Meta's OpenEnv (PR #132)</h2>
+                <p>
+                    OpenEnv is Meta's framework for building isolated, HTTP-based execution environments for agentic RL training. After the hackathon, I refined the project and contributed it to the <strong>meta-pytorch/OpenEnv repository</strong>.
+                </p>
 
-                    <div class="cta-links" style="justify-content: center;">
-                        <a href="https://huggingface.co/spaces/shankerram3/wildfire-game" class="cta-link primary" target="_blank" rel="noopener noreferrer">Play the Game</a>
-                    </div>
-                </div>
-            </div>
+                <h3>What the Contribution Included</h3>
+                <ol>
+                    <li><strong>Complete environment implementation</strong> — server-side engine, HTTP/WebSocket client, visualization utilities, comprehensive test coverage</li>
+                    <li><strong>Production-ready infrastructure</strong> — Docker containerization, Hugging Face Spaces deployment, CI/CD workflow updates, environment variable configuration</li>
+                    <li><strong>WebSocket migration fixes</strong> — migrated from deprecated HTTPEnvClient to EnvClient, fixed critical route conflicts for the custom web interface</li>
+                    <li><strong>Developer experience</strong> — 4 practical code examples, interactive web interface, detailed documentation with usage guides</li>
+                </ol>
 
-            <!-- Contributing to OpenEnv -->
-            <div class="content-card">
-                <div class="card-header">
-                    <span>OPEN SOURCE CONTRIBUTION</span>
-                    <div class="window-controls">
-                        <div class="window-control minimize">&minus;</div>
-                        <div class="window-control maximize">&square;</div>
-                        <div class="window-control close">&times;</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h2>Contributing to Meta's OpenEnv (PR #132)</h2>
-                    <p>
-                        OpenEnv is Meta's framework for building isolated, HTTP-based execution environments for agentic RL training. After the hackathon, I refined the project and contributed it to the <strong>meta-pytorch/OpenEnv repository</strong>.
-                    </p>
+                <p>
+                    The review process spanned <strong>27 commits</strong> addressing maintainer feedback. Copilot AI and the OpenEnv maintainers provided detailed reviews that significantly improved code quality — from fixing Pydantic v2 compatibility issues to implementing comprehensive bounds checking for array access.
+                </p>
 
-                    <h3>What the Contribution Included</h3>
-                    <ol>
-                        <li><strong>Complete environment implementation</strong> &mdash; server-side engine, HTTP/WebSocket client, visualization utilities, comprehensive test coverage</li>
-                        <li><strong>Production-ready infrastructure</strong> &mdash; Docker containerization, Hugging Face Spaces deployment, CI/CD workflow updates, environment variable configuration</li>
-                        <li><strong>WebSocket migration fixes</strong> &mdash; migrated from deprecated HTTPEnvClient to EnvClient, fixed critical route conflicts for the custom web interface</li>
-                        <li><strong>Developer experience</strong> &mdash; 4 practical code examples, interactive web interface, detailed documentation with usage guides</li>
-                    </ol>
-
-                    <p>
-                        The review process spanned <strong>27 commits</strong> addressing maintainer feedback. Copilot AI and the OpenEnv maintainers provided detailed reviews that significantly improved code quality&mdash;from fixing Pydantic v2 compatibility issues to implementing comprehensive bounds checking for array access.
-                    </p>
-
-                    <div class="tech-tags">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">PyTorch</span>
-                        <span class="tech-tag">FastAPI</span>
-                        <span class="tech-tag">WebSockets</span>
-                        <span class="tech-tag">Docker</span>
-                        <span class="tech-tag">Llama 3.2</span>
-                        <span class="tech-tag">LoRA</span>
-                        <span class="tech-tag">Gradio</span>
-                        <span class="tech-tag">Hugging Face</span>
-                        <span class="tech-tag">AMD MI100</span>
-                        <span class="tech-tag">Gymnasium</span>
-                        <span class="tech-tag">Reinforcement Learning</span>
-                    </div>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">PyTorch</span>
+                    <span class="tech-tag">FastAPI</span>
+                    <span class="tech-tag">WebSockets</span>
+                    <span class="tech-tag">Docker</span>
+                    <span class="tech-tag">Llama 3.2</span>
+                    <span class="tech-tag">LoRA</span>
+                    <span class="tech-tag">Gradio</span>
+                    <span class="tech-tag">Hugging Face</span>
+                    <span class="tech-tag">AMD MI100</span>
+                    <span class="tech-tag">Gymnasium</span>
+                    <span class="tech-tag">Reinforcement Learning</span>
                 </div>
             </div>
 
-            <!-- Research Applications -->
-            <div class="content-card">
-                <div class="card-header">
-                    <span>RESEARCH APPLICATIONS</span>
-                    <div class="window-controls">
-                        <div class="window-control minimize">&minus;</div>
-                        <div class="window-control maximize">&square;</div>
-                        <div class="window-control close">&times;</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h2>Where This Goes Next</h2>
-                    <ul>
-                        <li><strong>Resource-Constrained Planning:</strong> Agents balance limited water and firebreak materials against future uncertainties&mdash;a fundamental challenge in operations research.</li>
-                        <li><strong>LLM-Based Agents:</strong> The training results prove language models can learn complex spatial reasoning. The environment is ideal for testing LLM-based control systems.</li>
-                        <li><strong>Safety-Critical RL:</strong> Wildfire containment is inherently high-stakes. The environment enables research into safe exploration and robust policy learning.</li>
-                        <li><strong>Multi-Agent Coordination:</strong> While currently single-agent, the architecture supports future extensions for team-based firefighting strategies.</li>
-                    </ul>
+            <div class="content-section">
+                <h2>Where This Goes Next</h2>
+                <ul>
+                    <li><strong>Resource-Constrained Planning:</strong> Agents balance limited water and firebreak materials against future uncertainties — a fundamental challenge in operations research.</li>
+                    <li><strong>LLM-Based Agents:</strong> The training results prove language models can learn complex spatial reasoning. The environment is ideal for testing LLM-based control systems.</li>
+                    <li><strong>Safety-Critical RL:</strong> Wildfire containment is inherently high-stakes. The environment enables research into safe exploration and robust policy learning.</li>
+                    <li><strong>Multi-Agent Coordination:</strong> While currently single-agent, the architecture supports future extensions for team-based firefighting strategies.</li>
+                </ul>
 
-                    <h3>Future Directions</h3>
-                    <ul>
-                        <li>Integration with real wildfire data for validation</li>
-                        <li>Reinforcement learning with PPO/GRPO for direct policy optimization</li>
-                        <li>Scaling to larger models (Llama 3.2 3B or 7B)</li>
-                        <li>Transfer learning from simulation to real-world scenarios</li>
-                    </ul>
-
-                    <h3>References</h3>
-                    <ul>
-                        <li>Rothermel, R. C. (1972). "A mathematical model for predicting fire spread in wildland fuels." USDA Forest Service Research Paper INT-115.</li>
-                        <li>MITRE Corporation. "SimFire: Wildland Fire Simulation for Machine Learning Applications."</li>
-                    </ul>
-                </div>
+                <h3>References</h3>
+                <ul>
+                    <li>Rothermel, R. C. (1972). "A mathematical model for predicting fire spread in wildland fuels." USDA Forest Service Research Paper INT-115.</li>
+                    <li>MITRE Corporation. "SimFire: Wildland Fire Simulation for Machine Learning Applications."</li>
+                </ul>
             </div>
 
         </div>
