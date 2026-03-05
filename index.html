@@ -1075,6 +1075,67 @@
             box-shadow: 2px 2px 0px rgba(26, 35, 126, 0.3);
         }
 
+        /* Blog Section */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .blog-card {
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .blog-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px var(--text-primary);
+        }
+
+        .blog-card .window-content {
+            background: #fff9c4;
+            padding: 2rem;
+        }
+
+        .blog-date {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .blog-card h3 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            color: var(--accent-primary);
+        }
+
+        .blog-card p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 1.2rem;
+        }
+
+        .blog-read-more {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            color: var(--accent-primary);
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border: 3px solid var(--accent-primary);
+            transition: all 0.1s ease;
+        }
+
+        .blog-card:hover .blog-read-more {
+            background: var(--accent-primary);
+            color: white;
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -1282,6 +1343,7 @@
                 <li role="none"><a href="#experience" role="menuitem">Experience</a></li>
                 <li role="none"><a href="#projects" role="menuitem">Projects</a></li>
                 <li role="none"><a href="#skills" role="menuitem">Skills</a></li>
+                <li role="none"><a href="#blog" role="menuitem">Blog</a></li>
                 <li role="none"><a href="#contact" role="menuitem">Contact</a></li>
                 <li role="none">
                     <a href="/resume.pdf" class="nav-resume-btn" download aria-label="Download resume PDF">
@@ -1910,6 +1972,70 @@
                     </p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Blog</h2>
+                <p class="section-subtitle">Technical deep dives and project stories from the field</p>
+            </div>
+
+            <div class="blog-grid">
+                <a href="blog-wildfire-rl.html" class="blog-card window-frame">
+                    <div class="window-title-bar">
+                        <span>BLOG POST</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">&minus;</div>
+                            <div class="window-control maximize">&square;</div>
+                            <div class="window-control close">&times;</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <span class="blog-date">November 19, 2025</span>
+                        <h3>Building a Wildfire RL Environment: From Hackathon to Open Source</h3>
+                        <p>
+                            How a hackathon prototype became a production-ready reinforcement learning environment
+                            in Meta's PyTorch OpenEnv framework &mdash; complete with physics-informed fire simulation,
+                            AI agent training, and an interactive human-vs-AI game.
+                        </p>
+                        <div class="tech-tags" style="margin-bottom: 1.2rem;">
+                            <span class="tech-tag">Reinforcement Learning</span>
+                            <span class="tech-tag">PyTorch</span>
+                            <span class="tech-tag">Open Source</span>
+                        </div>
+                        <span class="blog-read-more">READ MORE &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="blog-waterbot.html" class="blog-card window-frame">
+                    <div class="window-title-bar">
+                        <span>BLOG POST</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">&minus;</div>
+                            <div class="window-control maximize">&square;</div>
+                            <div class="window-control close">&times;</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <span class="blog-date">2025</span>
+                        <h3>Building Arizona WaterBot: A Multilingual RAG Chatbot</h3>
+                        <p>
+                            Designing and deploying a GraphRAG-powered multilingual chatbot
+                            serving 50,000+ users with real-time water resource information
+                            across Arizona communities.
+                        </p>
+                        <div class="tech-tags" style="margin-bottom: 1.2rem;">
+                            <span class="tech-tag">GraphRAG</span>
+                            <span class="tech-tag">LangChain</span>
+                            <span class="tech-tag">FastAPI</span>
+                        </div>
+                        <span class="blog-read-more">READ MORE &rarr;</span>
+                    </div>
+                </a>
             </div>
         </div>
     </section>

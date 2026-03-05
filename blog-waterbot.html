@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Arizona WaterBot: A Multilingual RAG Chatbot for Community Water Access | Ram Harikrishnan</title>
+
+    <meta name="description" content="How I built Arizona WaterBot — a multilingual GraphRAG chatbot serving 50,000+ users with real-time water resource information across Arizona communities.">
+    <meta name="author" content="Ram Harikrishnan">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Building Arizona WaterBot: A Multilingual RAG Chatbot for Community Water Access">
+    <meta property="og:description" content="How I built Arizona WaterBot — a multilingual GraphRAG chatbot serving 50,000+ users with real-time water resource information.">
+    <meta property="og:url" content="https://ramharikrishnan.dev/blog-waterbot.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #e8f4f8;
+            --bg-secondary: #d4e8f0;
+            --bg-card: #ffffff;
+            --accent-primary: #7c3aed;
+            --accent-secondary: #a855f7;
+            --accent-tertiary: #ec4899;
+            --accent-quaternary: #06b6d4;
+            --text-primary: #2c3e50;
+            --text-secondary: #5a6c7d;
+            --border-color: #b8d4e3;
+            --grid-color: rgba(124, 58, 237, 0.1);
+        }
+
+        body {
+            font-family: 'VT323', 'Courier New', monospace;
+            background-color: var(--bg-primary);
+            background-image:
+                linear-gradient(var(--grid-color) 2px, transparent 2px),
+                linear-gradient(90deg, var(--grid-color) 2px, transparent 2px);
+            background-size: 40px 40px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            image-rendering: pixelated;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 4px solid var(--accent-primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-primary);
+            text-decoration: none;
+            border: 5px solid var(--accent-primary);
+            padding: 0.5rem 1rem;
+            box-shadow: 4px 4px 0px var(--accent-primary);
+        }
+
+        .logo:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--accent-primary);
+        }
+
+        .back-link {
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            color: var(--accent-primary);
+            text-decoration: none;
+            border: 3px solid var(--accent-primary);
+            padding: 0.4rem 1rem;
+            transition: all 0.1s ease;
+        }
+
+        .back-link:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        /* Article */
+        .article-hero {
+            padding: 4rem 0 2rem;
+            text-align: center;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .meta-badge {
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            background: var(--accent-primary);
+            color: white;
+            padding: 0.3rem 1rem;
+            border: 3px solid var(--text-primary);
+            box-shadow: 3px 3px 0px var(--text-primary);
+        }
+
+        .article-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.8rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            text-shadow: 3px 3px 0px rgba(124, 58, 237, 0.2);
+            margin-bottom: 1.5rem;
+        }
+
+        .article-subtitle {
+            font-size: 1.6rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Content */
+        .article-content {
+            padding: 2rem 0 6rem;
+        }
+
+        .content-card {
+            border: 6px solid var(--text-primary);
+            box-shadow: 8px 8px 0px var(--text-primary);
+            background: var(--bg-card);
+            margin-bottom: 3rem;
+        }
+
+        .card-header {
+            background: #64b5f6;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--text-primary);
+        }
+
+        .card-header span {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            color: var(--text-primary);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .window-control {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .minimize { background: #ffd54f; }
+        .maximize { background: #81c784; }
+        .close { background: #e57373; }
+
+        .card-body {
+            padding: 2.5rem;
+            background: #fff9c4;
+        }
+
+        .card-body h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1rem;
+            color: var(--accent-primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .card-body h3 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            margin: 2rem 0 1rem;
+            line-height: 1.6;
+        }
+
+        .card-body p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .card-body ul, .card-body ol {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin: 1rem 0 1.5rem 2rem;
+        }
+
+        .card-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .card-body code {
+            font-family: 'VT323', monospace;
+            background: rgba(124, 58, 237, 0.1);
+            padding: 0.1rem 0.4rem;
+            border: 2px solid var(--border-color);
+            font-size: 1.3rem;
+        }
+
+        .code-block {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 4px solid var(--text-primary);
+            box-shadow: 4px 4px 0px var(--text-primary);
+            overflow-x: auto;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .code-block .keyword { color: #cba6f7; }
+        .code-block .string { color: #a6e3a1; }
+        .code-block .comment { color: #6c7086; }
+        .code-block .function { color: #89b4fa; }
+
+        /* Highlight box */
+        .highlight-box {
+            background: rgba(124, 58, 237, 0.08);
+            border-left: 6px solid var(--accent-primary);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border: 4px solid var(--accent-primary);
+        }
+
+        .highlight-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 4px solid var(--text-primary);
+            box-shadow: 4px 4px 0px var(--text-primary);
+        }
+
+        .stat-number {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.4rem;
+            color: var(--accent-primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        /* Tech tags */
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1.5rem 0;
+        }
+
+        .tech-tag {
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            padding: 0.3rem 0.8rem;
+            background: white;
+            border: 3px solid var(--text-primary);
+            box-shadow: 3px 3px 0px var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        /* Architecture diagram */
+        .architecture-diagram {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 4px solid var(--text-primary);
+            box-shadow: 4px 4px 0px var(--text-primary);
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            border-top: 6px solid var(--accent-primary);
+        }
+
+        footer a {
+            color: var(--accent-quaternary);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .article-title { font-size: 1.2rem; }
+            .card-body { padding: 1.5rem; }
+            .card-body h2 { font-size: 0.85rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-inner">
+            <a href="index.html" class="logo">RH</a>
+            <a href="index.html#blog" class="back-link">&larr; Back to Home</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="article-hero">
+            <div class="article-meta">
+                <span class="meta-badge">BLOG POST</span>
+                <span class="meta-badge" style="background: var(--accent-quaternary);">ARIZONA STATE UNIVERSITY</span>
+            </div>
+            <h1 class="article-title">Building Arizona WaterBot: A Multilingual RAG Chatbot for Community Water Access</h1>
+            <p class="article-subtitle">How we brought AI-powered water resource information to 50,000+ users across Arizona communities using GraphRAG, LangChain, and a full-stack cloud deployment.</p>
+        </div>
+
+        <div class="article-content">
+
+            <!-- Introduction -->
+            <div class="content-card">
+                <div class="card-header">
+                    <span>INTRODUCTION</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">&minus;</div>
+                        <div class="window-control maximize">&square;</div>
+                        <div class="window-control close">&times;</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2>The Problem: Water Information Shouldn't Be Hard to Find</h2>
+                    <p>
+                        Arizona faces unique water challenges. Between drought conditions, complex water rights systems, and a diverse multilingual population, simply getting accurate, timely water resource information to the people who need it most is a real problem. Many communities, especially those with large Spanish-speaking populations, struggle to access critical information about water availability, conservation programs, and local regulations.
+                    </p>
+                    <p>
+                        When I joined the Arizona Water Innovation Initiative at ASU as a Full Stack Developer, I saw an opportunity to build something that could make a tangible difference: a chatbot that could answer water-related questions in any language, drawing from authoritative sources and delivering answers people could actually trust.
+                    </p>
+                    <p>
+                        That project became <strong>Arizona WaterBot</strong>&mdash;a multilingual RAG chatbot now serving thousands of users across the state.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Impact Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">50,000+</span>
+                    <span class="stat-label">User Interactions</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">Multi-</span>
+                    <span class="stat-label">Lingual Support</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">AWS</span>
+                    <span class="stat-label">Cloud Deployed</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">GraphRAG</span>
+                    <span class="stat-label">Architecture</span>
+                </div>
+            </div>
+
+            <!-- Architecture -->
+            <div class="content-card">
+                <div class="card-header">
+                    <span>ARCHITECTURE</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">&minus;</div>
+                        <div class="window-control maximize">&square;</div>
+                        <div class="window-control close">&times;</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2>Designing the System: GraphRAG at the Core</h2>
+                    <p>
+                        Standard RAG (Retrieval-Augmented Generation) works well for simple question-answering, but water resource data is deeply interconnected. A question about "drought restrictions in Maricopa County" might involve county regulations, state-level policy, historical water usage data, and conservation program details&mdash;all linked in complex ways.
+                    </p>
+                    <p>
+                        That's why I chose a <strong>GraphRAG architecture</strong> using Neo4j as the knowledge graph. Instead of flat document retrieval, WaterBot traverses relationships between entities&mdash;connecting water districts, regulations, geographic regions, and conservation programs into a structured knowledge network.
+                    </p>
+
+                    <div class="architecture-diagram">
++------------------+     +------------------+     +------------------+
+|   User Query     |     |   LangChain      |     |    Neo4j         |
+|   (Any Language)  | --> |   Orchestration   | --> |   Knowledge      |
+|                  |     |                  |     |   Graph          |
++------------------+     +------------------+     +------------------+
+        |                        |                        |
+        v                        v                        v
++------------------+     +------------------+     +------------------+
+|   Language        |     |   OpenAI          |     |   Auto-Content   |
+|   Detection       |     |   GPT Generation  |     |   Ingestion      |
++------------------+     +------------------+     +------------------+
+        |                        |                        |
+        +------------------------+------------------------+
+                                 |
+                                 v
+                    +------------------------+
+                    |   FastAPI Backend       |
+                    |   + React Frontend      |
+                    |   Deployed on AWS       |
+                    +------------------------+</div>
+
+                    <h3>Key Architectural Decisions</h3>
+                    <ul>
+                        <li><strong>Neo4j over vector-only search:</strong> Water data has inherent graph structure. Districts contain regions, regions have policies, policies reference statutes. Graph traversal captures this naturally.</li>
+                        <li><strong>Auto-content ingestion pipeline:</strong> New water reports, policy updates, and community resources are automatically ingested, parsed, and added to the knowledge graph without manual intervention.</li>
+                        <li><strong>LangChain orchestration:</strong> Handles the multi-step pipeline from query understanding through graph retrieval to answer generation, with built-in chain-of-thought reasoning.</li>
+                        <li><strong>Language-agnostic design:</strong> Queries are processed in their original language. The LLM handles translation internally, so Spanish speakers get responses in Spanish without a separate translation layer.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="content-card">
+                <div class="card-header">
+                    <span>TECH STACK</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">&minus;</div>
+                        <div class="window-control maximize">&square;</div>
+                        <div class="window-control close">&times;</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2>The Full Stack</h2>
+
+                    <h3>Backend</h3>
+                    <ul>
+                        <li><strong>FastAPI</strong> &mdash; High-performance async API serving chatbot requests, user sessions, and admin operations</li>
+                        <li><strong>LangChain + OpenAI</strong> &mdash; RAG pipeline with prompt engineering for accurate, grounded responses</li>
+                        <li><strong>Neo4j</strong> &mdash; Graph database storing water resource entities and their relationships</li>
+                        <li><strong>PostgreSQL</strong> &mdash; User data, session management, and analytics storage</li>
+                    </ul>
+
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li><strong>React</strong> &mdash; Responsive chat interface with real-time streaming responses</li>
+                        <li><strong>Mobile-first design</strong> &mdash; Many users access WaterBot from phones in the field</li>
+                    </ul>
+
+                    <h3>Infrastructure</h3>
+                    <ul>
+                        <li><strong>AWS (EC2, S3)</strong> &mdash; Production hosting with auto-scaling capabilities</li>
+                        <li><strong>GitHub Actions CI/CD</strong> &mdash; Automated testing and deployment pipelines</li>
+                        <li><strong>Python/Bash automation</strong> &mdash; Data processing and deployment workflow scripts</li>
+                    </ul>
+
+                    <div class="tech-tags">
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Neo4j</span>
+                        <span class="tech-tag">LangChain</span>
+                        <span class="tech-tag">OpenAI</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">AWS EC2</span>
+                        <span class="tech-tag">AWS S3</span>
+                        <span class="tech-tag">GitHub Actions</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Docker</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenges -->
+            <div class="content-card">
+                <div class="card-header">
+                    <span>ENGINEERING CHALLENGES</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">&minus;</div>
+                        <div class="window-control maximize">&square;</div>
+                        <div class="window-control close">&times;</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2>Hard Problems We Solved</h2>
+
+                    <h3>1. Performance Under Peak Load</h3>
+                    <p>
+                        When WaterBot was featured in a community outreach campaign, traffic spiked dramatically. Our initial PostgreSQL queries weren't optimized for the access patterns we were seeing. I spent focused time profiling slow queries, adding proper indexes, restructuring joins, and tuning the backend logic. The result: stable performance even under peak load, with significantly reduced p95 latency.
+                    </p>
+
+                    <h3>2. Structured Debugging at Scale</h3>
+                    <p>
+                        A production chatbot serving real communities can't afford vague error handling. I implemented structured debugging methodologies across the codebase&mdash;systematic root cause analysis, comprehensive logging, and clear error categorization. When things broke (and they did), we could trace the exact failure path within minutes instead of hours.
+                    </p>
+
+                    <h3>3. Keeping the Knowledge Graph Fresh</h3>
+                    <p>
+                        Water policies change. New reports are published. Conservation programs launch and end. The auto-content ingestion pipeline needed to handle all of this gracefully&mdash;parsing different document formats, extracting entities and relationships, and updating the graph without corrupting existing data. Building this pipeline to be both robust and maintainable was one of the most rewarding engineering challenges of the project.
+                    </p>
+
+                    <h3>4. Multilingual Accuracy</h3>
+                    <p>
+                        It's one thing to translate an answer. It's another to ensure technical water terminology is accurate in Spanish. We worked with community advisors to validate that WaterBot's multilingual responses used the correct regional terminology, not just literal translations. The LLM's native multilingual capabilities, combined with domain-specific prompt engineering, made this achievable without a separate translation service.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Impact -->
+            <div class="content-card">
+                <div class="card-header">
+                    <span>IMPACT</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">&minus;</div>
+                        <div class="window-control maximize">&square;</div>
+                        <div class="window-control close">&times;</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2>What WaterBot Means for Arizona Communities</h2>
+                    <p>
+                        The numbers tell part of the story: 50,000+ user interactions, statewide deployment, consistent uptime. But the real impact is harder to quantify.
+                    </p>
+
+                    <div class="highlight-box">
+                        <p><strong>From our team lead, Prof. Stephen Carradini:</strong></p>
+                        <p><em>"Our speed and accuracy of updates increased greatly when Ram joined the team. His work ethic, clear technical vision, and project management skills all contributed to more effective team processes. He took on more projects than expected and always had great ideas to further the project. Ram's work on Waterbot helped us iterate significantly faster, which allowed us to serve more people more effectively."</em></p>
+                    </div>
+
+                    <p>
+                        WaterBot lowered the barrier to accessing critical water information. A Spanish-speaking farmer in rural Arizona can now ask about drought restrictions in their native language and get an accurate, sourced answer in seconds. A city planner can query conservation program details without digging through PDFs. A student can explore water policy for research without navigating bureaucratic websites.
+                    </p>
+                    <p>
+                        That's the kind of impact I want my engineering work to have: solving real problems for real people.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Lessons -->
+            <div class="content-card">
+                <div class="card-header">
+                    <span>TAKEAWAYS</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">&minus;</div>
+                        <div class="window-control maximize">&square;</div>
+                        <div class="window-control close">&times;</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2>Lessons Learned</h2>
+                    <ol>
+                        <li><strong>GraphRAG beats flat RAG for structured domains.</strong> When your data has inherent relationships, a knowledge graph isn't just nice-to-have&mdash;it's the difference between good answers and great ones.</li>
+                        <li><strong>Optimize for real access patterns, not synthetic benchmarks.</strong> Our PostgreSQL bottlenecks only appeared under real user behavior. Load testing with realistic query distributions is essential.</li>
+                        <li><strong>Multilingual isn't a feature; it's a requirement.</strong> For community-facing tools, language support determines who gets served and who gets left behind.</li>
+                        <li><strong>CI/CD pays for itself immediately.</strong> Automated pipelines let a small team ship confidently and frequently. We deployed updates without downtime or manual intervention.</li>
+                        <li><strong>Build with the community, not just for them.</strong> Working with community advisors on terminology and UX made WaterBot genuinely useful rather than technically impressive but practically confusing.</li>
+                    </ol>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Ram Harikrishnan. <a href="index.html">Back to Portfolio</a></p>
+        </div>
+    </footer>
+</body>
+</html>

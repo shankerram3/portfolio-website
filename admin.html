@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Admin | Ram Harikrishnan</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #e8f4f8;
+            --bg-card: #ffffff;
+            --accent-primary: #7c3aed;
+            --accent-secondary: #a855f7;
+            --accent-tertiary: #ec4899;
+            --accent-quaternary: #06b6d4;
+            --text-primary: #2c3e50;
+            --text-secondary: #5a6c7d;
+            --border-color: #b8d4e3;
+            --grid-color: rgba(124, 58, 237, 0.1);
+        }
+
+        body {
+            font-family: 'VT323', 'Courier New', monospace;
+            background-color: var(--bg-primary);
+            background-image:
+                linear-gradient(var(--grid-color) 2px, transparent 2px),
+                linear-gradient(90deg, var(--grid-color) 2px, transparent 2px);
+            background-size: 40px 40px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 4px solid var(--accent-primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-primary);
+            text-decoration: none;
+            border: 5px solid var(--accent-primary);
+            padding: 0.5rem 1rem;
+            box-shadow: 4px 4px 0px var(--accent-primary);
+        }
+
+        .header-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-tertiary);
+        }
+
+        .back-link {
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            color: var(--accent-primary);
+            text-decoration: none;
+            border: 3px solid var(--accent-primary);
+            padding: 0.4rem 1rem;
+            transition: all 0.1s ease;
+            cursor: pointer;
+            background: none;
+        }
+
+        .back-link:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        /* Login screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+
+        .login-box {
+            border: 6px solid var(--text-primary);
+            box-shadow: 8px 8px 0px var(--text-primary);
+            background: var(--bg-card);
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .login-header {
+            background: #64b5f6;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--text-primary);
+        }
+
+        .login-header span {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .window-control {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .minimize { background: #ffd54f; }
+        .maximize { background: #81c784; }
+        .close { background: #e57373; }
+
+        .login-body {
+            padding: 2.5rem;
+            background: #fff9c4;
+        }
+
+        .login-body h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--accent-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            border: 4px solid var(--text-primary);
+            background: white;
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+
+        .btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            padding: 1rem 2rem;
+            border: 4px solid var(--text-primary);
+            box-shadow: 4px 4px 0px var(--text-primary);
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--text-primary);
+        }
+
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--text-primary);
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--accent-quaternary);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--accent-tertiary);
+            color: white;
+        }
+
+        .btn-full {
+            width: 100%;
+            text-align: center;
+        }
+
+        .error-msg {
+            color: #e57373;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        /* Admin panel */
+        .admin-panel {
+            display: none;
+            padding: 3rem 0;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .panel-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .panel-header h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+            text-shadow: 3px 3px 0px rgba(124, 58, 237, 0.2);
+        }
+
+        /* Editor */
+        .editor-card {
+            border: 6px solid var(--text-primary);
+            box-shadow: 8px 8px 0px var(--text-primary);
+            background: var(--bg-card);
+            margin-bottom: 3rem;
+        }
+
+        .editor-header {
+            background: #64b5f6;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--text-primary);
+        }
+
+        .editor-header span {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+        }
+
+        .editor-body {
+            padding: 2.5rem;
+            background: #fff9c4;
+        }
+
+        .form-group textarea {
+            min-height: 400px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(124, 58, 237, 0.05);
+            border: 3px solid var(--border-color);
+        }
+
+        .toolbar button {
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            padding: 0.3rem 0.8rem;
+            border: 3px solid var(--text-primary);
+            background: white;
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+
+        .toolbar button:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        /* Preview */
+        .preview-area {
+            min-height: 200px;
+            padding: 2rem;
+            background: white;
+            border: 4px solid var(--text-primary);
+            margin-top: 1rem;
+            font-size: 1.3rem;
+            line-height: 1.8;
+        }
+
+        .preview-area h1, .preview-area h2, .preview-area h3 {
+            font-family: 'Press Start 2P', monospace;
+            margin: 1.5rem 0 1rem;
+            line-height: 1.6;
+        }
+
+        .preview-area h1 { font-size: 1rem; color: var(--accent-primary); }
+        .preview-area h2 { font-size: 0.85rem; color: var(--accent-primary); }
+        .preview-area h3 { font-size: 0.75rem; color: var(--text-primary); }
+
+        .preview-area p { margin-bottom: 1rem; }
+
+        .preview-area ul, .preview-area ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        .preview-area code {
+            background: rgba(124, 58, 237, 0.1);
+            padding: 0.1rem 0.4rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .preview-area pre {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 4px solid var(--text-primary);
+            overflow-x: auto;
+            font-family: 'VT323', monospace;
+        }
+
+        .preview-area blockquote {
+            border-left: 6px solid var(--accent-primary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: rgba(124, 58, 237, 0.05);
+        }
+
+        .preview-area strong { font-weight: bold; }
+        .preview-area em { font-style: italic; }
+
+        /* Actions */
+        .action-bar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* Tab switcher */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            padding: 0.8rem 1.5rem;
+            border: 4px solid var(--text-primary);
+            border-bottom: none;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: background 0.1s;
+            color: var(--text-secondary);
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--accent-primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-content {
+            border: 4px solid var(--text-primary);
+            border-top: none;
+            background: white;
+            position: relative;
+            z-index: 0;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            border: 4px solid var(--text-primary);
+            box-shadow: 4px 4px 0px var(--text-primary);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success { background: #81c784; color: var(--text-primary); }
+        .toast.error { background: #e57373; color: white; }
+
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .panel-header h1 { font-size: 1rem; }
+            .action-bar { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <div class="login-header">
+                <span>AUTHENTICATION</span>
+                <div class="window-controls">
+                    <div class="window-control minimize">&minus;</div>
+                    <div class="window-control maximize">&square;</div>
+                    <div class="window-control close">&times;</div>
+                </div>
+            </div>
+            <div class="login-body">
+                <h2>ADMIN LOGIN</h2>
+                <form id="loginForm" onsubmit="return handleLogin(event)">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter admin password" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">AUTHENTICATE</button>
+                    <p id="loginError" class="error-msg">Invalid password. Access denied.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel">
+        <header>
+            <div class="container header-inner">
+                <a href="index.html" class="logo">RH</a>
+                <span class="header-title">BLOG ADMIN</span>
+                <button class="back-link" onclick="handleLogout()">Logout</button>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="panel-header">
+                <h1>New Blog Post</h1>
+            </div>
+
+            <!-- Post Editor -->
+            <div class="editor-card">
+                <div class="editor-header">
+                    <span>POST EDITOR</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">&minus;</div>
+                        <div class="window-control maximize">&square;</div>
+                        <div class="window-control close">&times;</div>
+                    </div>
+                </div>
+                <div class="editor-body">
+                    <div class="form-group">
+                        <label for="postTitle">Post Title</label>
+                        <input type="text" id="postTitle" placeholder="Enter your post title...">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="postSlug">URL Slug</label>
+                            <input type="text" id="postSlug" placeholder="blog-my-post-title">
+                        </div>
+                        <div class="form-group">
+                            <label for="postDate">Date</label>
+                            <input type="date" id="postDate">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="postSubtitle">Subtitle / Description</label>
+                            <input type="text" id="postSubtitle" placeholder="A brief description for the blog card...">
+                        </div>
+                        <div class="form-group">
+                            <label for="postTags">Tags (comma separated)</label>
+                            <input type="text" id="postTags" placeholder="Python, AI, Open Source">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postBadges">Header Badges (comma separated)</label>
+                        <input type="text" id="postBadges" placeholder="BLOG POST, OPEN SOURCE, META / PYTORCH">
+                    </div>
+
+                    <!-- Tabs: Write / Preview -->
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchTab('write')">WRITE</div>
+                        <div class="tab" onclick="switchTab('preview')">PREVIEW</div>
+                    </div>
+                    <div class="tab-content">
+                        <div id="writePane" class="tab-pane active">
+                            <div class="toolbar">
+                                <button type="button" onclick="insertMarkdown('**', '**')" title="Bold"><b>B</b></button>
+                                <button type="button" onclick="insertMarkdown('*', '*')" title="Italic"><i>I</i></button>
+                                <button type="button" onclick="insertMarkdown('`', '`')" title="Code">Code</button>
+                                <button type="button" onclick="insertMarkdown('\n```\n', '\n```\n')" title="Code Block">Block</button>
+                                <button type="button" onclick="insertMarkdown('## ', '')" title="Heading 2">H2</button>
+                                <button type="button" onclick="insertMarkdown('### ', '')" title="Heading 3">H3</button>
+                                <button type="button" onclick="insertMarkdown('- ', '')" title="List">List</button>
+                                <button type="button" onclick="insertMarkdown('1. ', '')" title="Ordered List">OL</button>
+                                <button type="button" onclick="insertMarkdown('> ', '')" title="Quote">Quote</button>
+                                <button type="button" onclick="insertMarkdown('[', '](url)')" title="Link">Link</button>
+                            </div>
+                            <textarea id="postContent" placeholder="Write your post in Markdown...
+
+## Introduction
+Your opening paragraph here...
+
+## Main Section
+Content goes here. Use **bold** and *italic* for emphasis.
+
+### Subsection
+- Bullet points work too
+- Like this
+
+```python
+# Code blocks are supported
+print('Hello, world!')
+```
+
+> Blockquotes for callouts
+"></textarea>
+                        </div>
+                        <div id="previewPane" class="tab-pane">
+                            <div id="previewArea" class="preview-area">
+                                <p style="color: var(--text-secondary);">Switch to the Preview tab to see your rendered post...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-bar">
+                        <button class="btn btn-primary" onclick="generatePost()">GENERATE HTML</button>
+                        <button class="btn btn-secondary" onclick="downloadPost()">DOWNLOAD .HTML</button>
+                        <button class="btn" style="background: white;" onclick="saveDraft()">SAVE DRAFT</button>
+                        <button class="btn" style="background: white;" onclick="loadDraft()">LOAD DRAFT</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generated Output -->
+            <div id="outputSection" class="editor-card" style="display: none;">
+                <div class="editor-header">
+                    <span>GENERATED HTML</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">&minus;</div>
+                        <div class="window-control maximize">&square;</div>
+                        <div class="window-control close">&times;</div>
+                    </div>
+                </div>
+                <div class="editor-body">
+                    <p>Copy this HTML and save it as <code id="outputFilename"></code> in your portfolio-website folder. Then add a blog card entry to <code>index.html</code>.</p>
+                    <div class="toolbar">
+                        <button type="button" onclick="copyOutput()">Copy to Clipboard</button>
+                    </div>
+                    <textarea id="outputHtml" style="min-height: 300px; font-size: 1rem; background: #1e1e2e; color: #cdd6f4; border-color: #333;"></textarea>
+
+                    <div style="margin-top: 2rem;">
+                        <p><strong>Index.html blog card snippet:</strong></p>
+                        <textarea id="outputCardHtml" style="min-height: 120px; font-size: 1rem; background: #1e1e2e; color: #cdd6f4; border-color: #333;"></textarea>
+                        <div class="toolbar" style="margin-top: 0.5rem;">
+                            <button type="button" onclick="copyCardSnippet()">Copy Card Snippet</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+    // ============================
+    // Authentication
+    // ============================
+    // Password is hashed client-side. Set your password hash below.
+    // Default password: "ramadmin2025" — change this by updating the hash.
+    // To generate a new hash, run in browser console:
+    //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword')).then(h => console.log(Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('')))
+    const ADMIN_HASH = '8b3a3710c093c81c6e0e041b1e72027da tried6e06dc65dc19e22c10b5a0cb35a2c';
+
+    // Simpler approach: use a configurable passphrase check
+    // The hash above is a placeholder. We'll use a direct comparison with a
+    // base64-encoded password for simplicity on a static site.
+    // Encoded: "ramadmin2025" -> base64
+    const ADMIN_KEY = 'cmFtYWRtaW4yMDI1';
+
+    function handleLogin(e) {
+        e.preventDefault();
+        const pwd = document.getElementById('password').value;
+        const encoded = btoa(pwd);
+
+        if (encoded === ADMIN_KEY) {
+            sessionStorage.setItem('blog_admin_auth', 'true');
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').classList.add('active');
+            document.getElementById('loginError').style.display = 'none';
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+            document.getElementById('password').value = '';
+        }
+        return false;
+    }
+
+    function handleLogout() {
+        sessionStorage.removeItem('blog_admin_auth');
+        document.getElementById('adminPanel').classList.remove('active');
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('password').value = '';
+    }
+
+    // Auto-login if session exists
+    if (sessionStorage.getItem('blog_admin_auth') === 'true') {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminPanel').classList.add('active');
+    }
+
+    // ============================
+    // Tab Switching
+    // ============================
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+        if (tab === 'write') {
+            document.querySelectorAll('.tab')[0].classList.add('active');
+            document.getElementById('writePane').classList.add('active');
+        } else {
+            document.querySelectorAll('.tab')[1].classList.add('active');
+            document.getElementById('previewPane').classList.add('active');
+            renderPreview();
+        }
+    }
+
+    // ============================
+    // Markdown Toolbar
+    // ============================
+    function insertMarkdown(before, after) {
+        const ta = document.getElementById('postContent');
+        const start = ta.selectionStart;
+        const end = ta.selectionEnd;
+        const selected = ta.value.substring(start, end);
+        const replacement = before + (selected || 'text') + after;
+        ta.value = ta.value.substring(0, start) + replacement + ta.value.substring(end);
+        ta.focus();
+        ta.selectionStart = start + before.length;
+        ta.selectionEnd = start + before.length + (selected || 'text').length;
+    }
+
+    // ============================
+    // Markdown Parser (lightweight)
+    // ============================
+    function parseMarkdown(md) {
+        let html = md;
+
+        // Code blocks (must be first)
+        html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
+            const escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return '<pre><code>' + escaped + '</code></pre>';
+        });
+
+        // Inline code
+        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+        // Headers
+        html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+        html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+        html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+        // Bold and italic
+        html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+        html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+        // Blockquotes
+        html = html.replace(/^> (.+)$/gm, '<blockquote><p>$1</p></blockquote>');
+
+        // Unordered lists
+        html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+        html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+
+        // Ordered lists
+        html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+
+        // Links
+        html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+        // Paragraphs (lines not already wrapped)
+        html = html.split('\n\n').map(block => {
+            block = block.trim();
+            if (!block) return '';
+            if (block.startsWith('<h') || block.startsWith('<ul') || block.startsWith('<ol') ||
+                block.startsWith('<pre') || block.startsWith('<blockquote') || block.startsWith('<li')) {
+                return block;
+            }
+            return '<p>' + block.replace(/\n/g, '<br>') + '</p>';
+        }).join('\n');
+
+        return html;
+    }
+
+    function renderPreview() {
+        const md = document.getElementById('postContent').value;
+        const html = parseMarkdown(md);
+        document.getElementById('previewArea').innerHTML = html || '<p style="color: var(--text-secondary);">Nothing to preview yet...</p>';
+    }
+
+    // ============================
+    // Auto-generate slug from title
+    // ============================
+    document.getElementById('postTitle').addEventListener('input', function() {
+        const slug = this.value
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+        document.getElementById('postSlug').value = 'blog-' + slug;
+    });
+
+    // Set default date to today
+    document.getElementById('postDate').valueAsDate = new Date();
+
+    // ============================
+    // Generate Blog Post HTML
+    // ============================
+    function generatePost() {
+        const title = document.getElementById('postTitle').value;
+        const subtitle = document.getElementById('postSubtitle').value;
+        const slug = document.getElementById('postSlug').value;
+        const date = document.getElementById('postDate').value;
+        const tags = document.getElementById('postTags').value;
+        const badges = document.getElementById('postBadges').value || 'BLOG POST';
+        const content = document.getElementById('postContent').value;
+
+        if (!title || !content) {
+            showToast('Title and content are required!', 'error');
+            return;
+        }
+
+        const parsedContent = parseMarkdown(content);
+
+        // Split content by h2 headers to create sections
+        const sections = [];
+        const parts = parsedContent.split(/<h2>(.*?)<\/h2>/);
+
+        if (parts[0].trim()) {
+            sections.push({ title: 'INTRODUCTION', content: parts[0] });
+        }
+
+        for (let i = 1; i < parts.length; i += 2) {
+            sections.push({
+                title: parts[i].toUpperCase(),
+                content: parts[i + 1] || ''
+            });
+        }
+
+        if (sections.length === 0) {
+            sections.push({ title: 'CONTENT', content: parsedContent });
+        }
+
+        // Build badge HTML
+        const badgeColors = ['var(--accent-primary)', '#e17055', 'var(--accent-tertiary)', 'var(--accent-quaternary)'];
+        const badgesHtml = badges.split(',').map((b, i) =>
+            `                <span class="meta-badge"${i > 0 ? ` style="background: ${badgeColors[i % badgeColors.length]};"` : ''}>${b.trim()}</span>`
+        ).join('\n');
+
+        // Build tag HTML
+        const tagsHtml = tags ? tags.split(',').map(t =>
+            `                        <span class="tech-tag">${t.trim()}</span>`
+        ).join('\n') : '';
+
+        // Build sections HTML
+        const sectionsHtml = sections.map(section => `
+            <div class="content-card">
+                <div class="card-header">
+                    <span>${section.title}</span>
+                    <div class="window-controls">
+                        <div class="window-control minimize">&minus;</div>
+                        <div class="window-control maximize">&square;</div>
+                        <div class="window-control close">&times;</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    ${section.content}
+                </div>
+            </div>`).join('\n');
+
+        // Format display date
+        const displayDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+        const fullHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title} | Ram Harikrishnan</title>
+    <meta name="description" content="${subtitle}">
+    <meta name="author" content="Ram Harikrishnan">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="${title}">
+    <meta property="og:description" content="${subtitle}">
+    <meta property="og:url" content="https://ramharikrishnan.dev/${slug}.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #e8f4f8; --bg-card: #ffffff; --accent-primary: #7c3aed;
+            --accent-secondary: #a855f7; --accent-tertiary: #ec4899; --accent-quaternary: #06b6d4;
+            --text-primary: #2c3e50; --text-secondary: #5a6c7d; --border-color: #b8d4e3;
+            --grid-color: rgba(124, 58, 237, 0.1);
+        }
+        body { font-family: 'VT323', 'Courier New', monospace; background-color: var(--bg-primary);
+            background-image: linear-gradient(var(--grid-color) 2px, transparent 2px),
+            linear-gradient(90deg, var(--grid-color) 2px, transparent 2px);
+            background-size: 40px 40px; color: var(--text-primary); line-height: 1.6; image-rendering: pixelated; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+        header { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 4px solid var(--accent-primary); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Press Start 2P', monospace; font-size: 1.2rem; color: var(--accent-primary); text-decoration: none; border: 5px solid var(--accent-primary); padding: 0.5rem 1rem; box-shadow: 4px 4px 0px var(--accent-primary); }
+        .logo:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0px var(--accent-primary); }
+        .back-link { font-family: 'VT323', monospace; font-size: 1.4rem; color: var(--accent-primary); text-decoration: none; border: 3px solid var(--accent-primary); padding: 0.4rem 1rem; transition: all 0.1s ease; }
+        .back-link:hover { background: var(--accent-primary); color: white; }
+        .article-hero { padding: 4rem 0 2rem; text-align: center; }
+        .article-meta { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+        .meta-badge { font-family: 'VT323', monospace; font-size: 1.2rem; background: var(--accent-primary); color: white; padding: 0.3rem 1rem; border: 3px solid var(--text-primary); box-shadow: 3px 3px 0px var(--text-primary); }
+        .article-title { font-family: 'Press Start 2P', monospace; font-size: 1.8rem; line-height: 1.8; color: var(--text-primary); text-shadow: 3px 3px 0px rgba(124,58,237,0.2); margin-bottom: 1.5rem; }
+        .article-subtitle { font-size: 1.6rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto; }
+        .article-content { padding: 2rem 0 6rem; }
+        .content-card { border: 6px solid var(--text-primary); box-shadow: 8px 8px 0px var(--text-primary); background: var(--bg-card); margin-bottom: 3rem; }
+        .card-header { background: #64b5f6; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--text-primary); }
+        .card-header span { font-family: 'Press Start 2P', monospace; font-size: 0.7rem; }
+        .window-controls { display: flex; gap: 0.5rem; }
+        .window-control { width: 20px; height: 20px; border-radius: 50%; border: 3px solid var(--text-primary); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; }
+        .minimize { background: #ffd54f; } .maximize { background: #81c784; } .close { background: #e57373; }
+        .card-body { padding: 2.5rem; background: #fff9c4; }
+        .card-body h2 { font-family: 'Press Start 2P', monospace; font-size: 1rem; color: var(--accent-primary); margin-bottom: 1.5rem; line-height: 1.6; }
+        .card-body h3 { font-family: 'Press Start 2P', monospace; font-size: 0.8rem; margin: 2rem 0 1rem; line-height: 1.6; }
+        .card-body p { font-size: 1.4rem; line-height: 1.8; margin-bottom: 1.2rem; }
+        .card-body ul, .card-body ol { font-size: 1.4rem; line-height: 1.8; margin: 1rem 0 1.5rem 2rem; }
+        .card-body li { margin-bottom: 0.5rem; }
+        .card-body code { font-family: 'VT323', monospace; background: rgba(124,58,237,0.1); padding: 0.1rem 0.4rem; border: 2px solid var(--border-color); }
+        .card-body pre { background: #1e1e2e; color: #cdd6f4; padding: 1.5rem; margin: 1.5rem 0; border: 4px solid var(--text-primary); box-shadow: 4px 4px 0px var(--text-primary); overflow-x: auto; font-family: 'VT323', monospace; font-size: 1.2rem; }
+        .card-body blockquote { border-left: 6px solid var(--accent-primary); padding: 1rem 1.5rem; margin: 1.5rem 0; background: rgba(124,58,237,0.05); border: 4px solid var(--accent-primary); }
+        .tech-tags { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1.5rem 0; }
+        .tech-tag { font-family: 'VT323', monospace; font-size: 1.1rem; padding: 0.3rem 0.8rem; background: white; border: 3px solid var(--text-primary); box-shadow: 3px 3px 0px var(--text-primary); }
+        footer { background: var(--text-primary); color: var(--bg-primary); text-align: center; padding: 2rem; font-size: 1.2rem; border-top: 6px solid var(--accent-primary); }
+        footer a { color: var(--accent-quaternary); text-decoration: none; }
+        @media (max-width: 768px) { .article-title { font-size: 1.2rem; } .card-body { padding: 1.5rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-inner">
+            <a href="index.html" class="logo">RH</a>
+            <a href="index.html#blog" class="back-link">&larr; Back to Home</a>
+        </div>
+    </header>
+    <div class="container">
+        <div class="article-hero">
+            <div class="article-meta">
+${badgesHtml}
+            </div>
+            <h1 class="article-title">${title}</h1>
+            <p class="article-subtitle">${subtitle}</p>
+        </div>
+        <div class="article-content">
+${sectionsHtml}
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>&copy; ${new Date().getFullYear()} Ram Harikrishnan. <a href="index.html">Back to Portfolio</a></p>
+        </div>
+    </footer>
+</body>
+</html>`;
+
+        // Show output
+        document.getElementById('outputSection').style.display = 'block';
+        document.getElementById('outputHtml').value = fullHtml;
+        document.getElementById('outputFilename').textContent = slug + '.html';
+
+        // Generate index.html card snippet
+        const cardHtml = `                <a href="${slug}.html" class="blog-card window-frame">
+                    <div class="window-title-bar">
+                        <span>BLOG POST</span>
+                        <div class="window-controls">
+                            <div class="window-control minimize">&minus;</div>
+                            <div class="window-control maximize">&square;</div>
+                            <div class="window-control close">&times;</div>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <span class="blog-date">${displayDate}</span>
+                        <h3>${title}</h3>
+                        <p>${subtitle}</p>
+                        <div class="tech-tags" style="margin-bottom: 1.2rem;">
+${tagsHtml}
+                        </div>
+                        <span class="blog-read-more">READ MORE &rarr;</span>
+                    </div>
+                </a>`;
+
+        document.getElementById('outputCardHtml').value = cardHtml;
+
+        document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+        showToast('Blog post HTML generated!', 'success');
+    }
+
+    // ============================
+    // Download
+    // ============================
+    function downloadPost() {
+        const html = document.getElementById('outputHtml').value;
+        const slug = document.getElementById('postSlug').value || 'blog-post';
+
+        if (!html) {
+            showToast('Generate the HTML first!', 'error');
+            return;
+        }
+
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = slug + '.html';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Downloaded ' + slug + '.html', 'success');
+    }
+
+    // ============================
+    // Draft Save/Load
+    // ============================
+    function saveDraft() {
+        const draft = {
+            title: document.getElementById('postTitle').value,
+            subtitle: document.getElementById('postSubtitle').value,
+            slug: document.getElementById('postSlug').value,
+            date: document.getElementById('postDate').value,
+            tags: document.getElementById('postTags').value,
+            badges: document.getElementById('postBadges').value,
+            content: document.getElementById('postContent').value
+        };
+        localStorage.setItem('blog_draft', JSON.stringify(draft));
+        showToast('Draft saved!', 'success');
+    }
+
+    function loadDraft() {
+        const saved = localStorage.getItem('blog_draft');
+        if (!saved) {
+            showToast('No saved draft found.', 'error');
+            return;
+        }
+        const draft = JSON.parse(saved);
+        document.getElementById('postTitle').value = draft.title || '';
+        document.getElementById('postSubtitle').value = draft.subtitle || '';
+        document.getElementById('postSlug').value = draft.slug || '';
+        document.getElementById('postDate').value = draft.date || '';
+        document.getElementById('postTags').value = draft.tags || '';
+        document.getElementById('postBadges').value = draft.badges || '';
+        document.getElementById('postContent').value = draft.content || '';
+        showToast('Draft loaded!', 'success');
+    }
+
+    // ============================
+    // Clipboard
+    // ============================
+    function copyOutput() {
+        navigator.clipboard.writeText(document.getElementById('outputHtml').value);
+        showToast('HTML copied to clipboard!', 'success');
+    }
+
+    function copyCardSnippet() {
+        navigator.clipboard.writeText(document.getElementById('outputCardHtml').value);
+        showToast('Card snippet copied!', 'success');
+    }
+
+    // ============================
+    // Toast
+    // ============================
+    function showToast(msg, type) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.className = 'toast ' + type + ' show';
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+    </script>
+</body>
+</html>
