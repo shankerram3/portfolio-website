@@ -98,7 +98,7 @@
       .mobile-menu-btn{display:none;background:none;border:none;color:var(--ink);font-size:1.5rem;cursor:pointer;z-index:1001;padding:.5rem;margin-left:auto}
 
       /* HERO */
-      .hero{min-height:100vh;display:flex;align-items:center;padding-top:90px;padding-bottom:50px}
+      .hero{padding:130px 0 90px}
       .hero-content{display:flex;flex-direction:column;gap:40px;width:100%}
       .hero-head{width:100%;display:flex;flex-direction:column;gap:30px}
       .hero-head .eyebrow{margin-bottom:0}
@@ -114,14 +114,14 @@
       @media(prefers-reduced-motion:reduce){.hero-name .caret{animation:none;opacity:0}}
       .hero-tagline{font-family:var(--serif);font-size:clamp(22px,3vw,34px);color:var(--ink-dim);margin-top:14px;line-height:1.25}
       .hero-tagline .it{font-style:italic;color:var(--accent)}
-      .hero-description{max-width:600px;margin-top:24px;font-size:18px;color:var(--ink-dim);line-height:1.6}
+      .hero-description{max-width:600px;margin-top:0;font-size:18px;color:var(--ink-dim);line-height:1.6}
       .hero-description b{color:var(--ink);font-weight:600}
       .cta-buttons{margin-top:34px;display:flex;flex-wrap:wrap;gap:13px}
       .btn{font-family:var(--mono);font-size:13px;letter-spacing:.04em;padding:13px 22px;border:1px solid var(--line);border-radius:2px;display:inline-flex;align-items:center;gap:8px;transition:.22s;background:var(--panel)}
       .btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
       .btn-primary{background:var(--accent);color:#0a0b0c;border-color:var(--accent);font-weight:700}
       .btn-primary:hover{color:#0a0b0c;box-shadow:0 8px 30px rgba(200,241,53,.25);filter:brightness(1.05)}
-      .hero-image-wrapper{position:relative;width:100%;max-width:330px}
+      .hero-image-wrapper{position:relative;width:100%;max-width:250px;margin-left:auto}
       .hero-image{display:block;width:100%;border-radius:4px;object-fit:cover;border:1px solid var(--line);filter:grayscale(.2) contrast(1.02)}
       .hero-image-wrapper::before{content:"";position:absolute;top:14px;left:14px;right:-14px;bottom:-14px;border:1px solid var(--accent);border-radius:4px;z-index:-1;opacity:.55}
 
