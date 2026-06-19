@@ -273,6 +273,7 @@
             <div class="logo" aria-label="Ram Harikrishnan"><svg class="logo-mark" viewBox="15 17 35 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 22 L30 32 L20 42" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="33" y="38" width="14" height="6" rx="3" fill="var(--accent)"/></svg>RAM&nbsp;HARIKRISHNAN</div>
             <ul class="nav-links" role="menubar">
                 <li role="none"><a href="#home" role="menuitem">Home</a></li>
+                <li role="none"><a href="#about" role="menuitem">About</a></li>
                 <li role="none"><a href="#achievements" role="menuitem">Awards</a></li>
                 <li role="none"><a href="#experience" role="menuitem">Experience</a></li>
                 <li role="none"><a href="#services" role="menuitem">Services</a></li>
@@ -329,11 +330,29 @@
         </div>
     </section>
 
+    <!-- About -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header rv">
+                <span class="sec-num">01</span>
+                <h2 class="section-title">About</h2>
+                <span class="section-subtitle">how I think &amp; work</span>
+            </div>
+            <p class="rv" style="max-width:62ch;font-size:19px;color:var(--ink-dim);line-height:1.7;margin-bottom:16px">I build AI that <b style="color:var(--ink)">ships</b>, not AI that demos. Most LLM projects stall at the prototype — mine go to production, get monitored, and keep working when real users show up.</p>
+            <p class="rv" style="max-width:62ch;font-size:19px;color:var(--ink-dim);line-height:1.7;margin-bottom:38px">I've gone from co-founding an edtech startup, to architecting enterprise GenAI serving <b style="color:var(--ink)">50K+ users</b>, to building computer-vision pipelines for the power grid. The throughline: I own the whole problem — model, backend, deployment, and the metrics that prove it worked.</p>
+            <div class="skills-grid">
+                <div class="card skill-category rv"><h3>Ship to production</h3><p style="color:var(--ink-dim);font-size:14.5px;line-height:1.55;margin:0">Demos are easy; production is the job. I deliver deployed, observable, maintainable systems — not notebooks.</p></div>
+                <div class="card skill-category rv"><h3>Measure everything</h3><p style="color:var(--ink-dim);font-size:14.5px;line-height:1.55;margin:0">Every claim ties to a number — latency, accuracy, coverage, cost. If it can't be measured, it isn't done.</p></div>
+                <div class="card skill-category rv"><h3>Explain in plain language</h3><p style="color:var(--ink-dim);font-size:14.5px;line-height:1.55;margin:0">You'll always know what I'm building and why — clear trade-offs, honest status, no black boxes.</p></div>
+            </div>
+        </div>
+    </section>
+
     <!-- Achievements / Awards -->
     <section id="achievements">
         <div class="container">
             <div class="section-header rv">
-                <span class="sec-num">01</span>
+                <span class="sec-num">02</span>
                 <h2 class="section-title">Awards &amp; recognition</h2>
                 <p class="section-subtitle">Hackathon wins, published research &amp; open source</p>
             </div>
@@ -376,7 +395,7 @@
     <section id="experience">
         <div class="container">
             <div class="section-header rv">
-                <span class="sec-num">02</span>
+                <span class="sec-num">03</span>
                 <h2 class="section-title">Professional experience</h2>
                 <p class="section-subtitle">5+ years building scalable systems &amp; intelligent applications</p>
             </div>
@@ -450,7 +469,7 @@
     <section id="services">
         <div class="container">
             <div class="section-header rv">
-                <span class="sec-num">03</span>
+                <span class="sec-num">04</span>
                 <h2 class="section-title">What I build for clients</h2>
                 <p class="section-subtitle">Freelance &amp; contract · fixed-scope or ongoing</p>
             </div>
@@ -493,7 +512,7 @@
     <section id="projects">
         <div class="container">
             <div class="section-header rv">
-                <span class="sec-num">04</span>
+                <span class="sec-num">05</span>
                 <h2 class="section-title">Selected projects</h2>
                 <p class="section-subtitle"><a href="/portfolio.pdf" download style="color:var(--accent)">Download full portfolio (PDF) ↓</a></p>
             </div>
@@ -551,6 +570,7 @@
                 </div>
 
                 <div class="card project-card rv">
+                    <img class="card-thumb" src="images/thumb-makerbot.png" alt="" loading="lazy">
                     <h3>MakerBOT — AI Tutor</h3>
                     <p>An AI tutor that answers math, physics &amp; science questions and generates interactive React visualizations in real time using the Claude API. Claude returns explanation + executable component code, safely rendered inside a sandboxed iframe.</p>
                     <div class="tech-tags">
@@ -563,6 +583,7 @@
                 </div>
 
                 <div class="card project-card rv">
+                    <img class="card-thumb" src="images/thumb-graph.png" alt="" loading="lazy">
                     <h3>Graph Processing at Scale</h3>
                     <p>Large-scale graph data-processing pipeline using Neo4j, Terraform, AWS, Docker, Kubernetes, and Kafka. Processed the NYC Yellow Cab dataset into graph nodes/relationships, implementing PageRank and BFS with Neo4j Graph Data Science.</p>
                     <div class="tech-tags">
@@ -572,6 +593,7 @@
                 </div>
 
                 <div class="card project-card rv">
+                    <img class="card-thumb" src="images/thumb-nomadsync.png" alt="" loading="lazy">
                     <h3>NomadSync — AI Travel Planner</h3>
                     <p>Collaborative AI trip planner where groups plan via natural-language chat. A LangGraph agent extracts trip memory with confidence scoring, versions plans with rollback, pulls live flight data (Amadeus), and streams updates over Server-Sent Events.</p>
                     <div class="tech-tags">
@@ -584,6 +606,7 @@
                 </div>
 
                 <div class="card project-card rv">
+                    <img class="card-thumb" src="images/thumb-imgclass.png" alt="" loading="lazy">
                     <h3>AI-Generated Image Classification</h3>
                     <p>Deep-learning model to classify AI-generated vs. real images using ResNet50v2 and EfficientNetV2. Preprocessed CFAKE &amp; ArtiFact datasets with augmentation, performed hyperparameter tuning, and evaluated with AUC, accuracy, precision, recall, and F1.</p>
                     <div class="tech-tags">
@@ -599,7 +622,7 @@
     <section id="skills">
         <div class="container">
             <div class="section-header rv">
-                <span class="sec-num">05</span>
+                <span class="sec-num">06</span>
                 <h2 class="section-title">Technical expertise</h2>
                 <p class="section-subtitle">Hands-on, in production — not buzzwords</p>
             </div>
@@ -678,7 +701,7 @@
     <section id="education">
         <div class="container">
             <div class="section-header rv">
-                <span class="sec-num">06</span>
+                <span class="sec-num">07</span>
                 <h2 class="section-title">Education</h2>
                 <p class="section-subtitle">Academic background &amp; coursework</p>
             </div>
@@ -725,7 +748,7 @@
     <section id="blog">
         <div class="container">
             <div class="section-header rv">
-                <span class="sec-num">07</span>
+                <span class="sec-num">08</span>
                 <h2 class="section-title">Writing</h2>
                 <p class="section-subtitle">Technical deep dives &amp; project stories</p>
             </div>
