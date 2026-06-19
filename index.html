@@ -179,7 +179,8 @@
 
       /* PROJECT GRID */
       .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px}
-      .project-card{padding:30px 28px;display:flex;flex-direction:column}
+      .project-card{padding:30px 28px;display:flex;flex-direction:column;overflow:hidden}
+      .card-thumb{display:block;width:calc(100% + 56px);height:172px;object-fit:cover;object-position:top;margin:-30px -28px 20px;border-bottom:1px solid var(--line-soft)}
       .project-card h3{font-size:19px;font-weight:600;margin-bottom:11px;letter-spacing:-.01em}
       .project-card p{color:var(--ink-dim);font-size:14.5px;line-height:1.6;margin-bottom:18px;flex-grow:1}
 
@@ -523,6 +524,7 @@
 
             <div class="projects-grid">
                 <div class="card project-card rv">
+                    <img class="card-thumb" src="images/startup-demo.jpg" alt="Startup Intelligence Analysis app interface" loading="lazy">
                     <h3>Startup Intelligence Analysis App</h3>
                     <p>Production-ready GraphRAG app: FastAPI backend, Neo4j graph DB, and OpenAI GPT-4o for query processing. 40+ API endpoints, Redis caching (200× faster cached responses), Prometheus monitoring, 70%+ test coverage, Docker + CI/CD.</p>
                     <div class="tech-tags">
@@ -536,6 +538,7 @@
                 </div>
 
                 <div class="card project-card rv">
+                    <img class="card-thumb" src="images/wildfire-sim.gif" alt="Wildfire containment RL simulation" loading="lazy">
                     <h3>Wildfire Control RL Agent</h3>
                     <p>Reached the Final Four with a reinforcement-learning system using Llama 3.2 with LoRA fine-tuning. Trained on 16,000+ demonstrations using GRPO and behavior cloning on AMD MI100 GPU. Deployed to Hugging Face Spaces with optimized inference.</p>
                     <div class="tech-tags">
