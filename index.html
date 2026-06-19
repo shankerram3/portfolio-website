@@ -99,7 +99,10 @@
 
       /* HERO */
       .hero{min-height:100vh;display:flex;align-items:center;padding-top:90px;padding-bottom:50px}
-      .hero-content{display:grid;grid-template-columns:1.35fr .9fr;gap:56px;align-items:center;width:100%}
+      .hero-content{display:flex;flex-direction:column;gap:40px;width:100%}
+      .hero-head{width:100%}
+      .hero-body{display:grid;grid-template-columns:1.3fr .9fr;gap:56px;align-items:center}
+      .hero-tagline{margin-top:14px}
       .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-deep);display:flex;align-items:center;gap:12px;margin-bottom:24px}
       .eyebrow::before{content:"";width:38px;height:1px;background:var(--accent-deep)}
       .hero-name{font-family:var(--serif);font-weight:400;font-size:clamp(46px,7vw,92px);line-height:1.22;letter-spacing:-.01em}
@@ -250,7 +253,7 @@
 
       /* RESPONSIVE */
       @media(max-width:968px){
-        .hero-content{grid-template-columns:1fr;gap:40px}
+        .hero-body{grid-template-columns:1fr;gap:32px}
         .hero-image-wrapper{order:-1;max-width:300px}
         .svc-grid{grid-template-columns:1fr}
         .section-subtitle{margin-left:0;text-align:left;width:100%}
@@ -295,24 +298,28 @@
     <section id="home" class="hero" role="main">
         <div class="container">
             <div class="hero-content">
-                <div class="hero-text">
+                <div class="hero-head">
                     <div class="eyebrow rv">Gen AI Developer · Backend Engineer · Available for freelance</div>
                     <h1 class="hero-name rv"><span class="typed-line"><span class="typed" id="typed">Ram Harikrishnan</span><span class="caret" aria-hidden="true"></span></span></h1>
                     <p class="hero-tagline rv">I ship <span class="it">production</span> AI systems.</p>
-                    <p class="hero-description rv">
-                        5+ years building software, focused on getting LLM systems into production on
-                        <b>Claude</b> &amp; <b>OpenAI</b>. I design <b>RAG / GraphRAG pipelines</b>,
-                        <b>LLM agents</b> (LangGraph, MCP, tool use), fine-tuned models, and
-                        <b>FastAPI</b> backends — owning deployment, CI/CD and monitoring end to end.
-                    </p>
-                    <div class="cta-buttons rv">
-                        <a href="#contact" class="btn btn-primary">Hire me →</a>
-                        <a href="#projects" class="btn">See selected work</a>
-                        <a href="/portfolio.pdf" class="btn" download>Portfolio ↓</a>
-                    </div>
                 </div>
-                <div class="hero-image-wrapper rv">
-                    <img src="images/ram-harikrishnan.jpg" alt="Ram Harikrishnan — Gen AI Developer & Backend Engineer" class="hero-image">
+                <div class="hero-body">
+                    <div class="hero-text">
+                        <p class="hero-description rv">
+                            5+ years building software, focused on getting LLM systems into production on
+                            <b>Claude</b> &amp; <b>OpenAI</b>. I design <b>RAG / GraphRAG pipelines</b>,
+                            <b>LLM agents</b> (LangGraph, MCP, tool use), fine-tuned models, and
+                            <b>FastAPI</b> backends — owning deployment, CI/CD and monitoring end to end.
+                        </p>
+                        <div class="cta-buttons rv">
+                            <a href="#contact" class="btn btn-primary">Hire me →</a>
+                            <a href="#projects" class="btn">See selected work</a>
+                            <a href="/portfolio.pdf" class="btn" download>Portfolio ↓</a>
+                        </div>
+                    </div>
+                    <div class="hero-image-wrapper rv">
+                        <img src="images/ram-harikrishnan.jpg" alt="Ram Harikrishnan — Gen AI Developer & Backend Engineer" class="hero-image">
+                    </div>
                 </div>
             </div>
         </div>
