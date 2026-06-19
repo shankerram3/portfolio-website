@@ -89,7 +89,7 @@
       nav{position:fixed;top:0;width:100%;z-index:1000;backdrop-filter:blur(10px);background:rgba(10,11,12,.72);border-bottom:1px solid var(--line-soft)}
       .nav-container{max-width:1180px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
       .logo{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:9px;color:var(--ink)}
-      .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)}
+      .logo .logo-mark{width:19px;height:19px;flex:0 0 auto;display:block}
       .nav-links{display:flex;gap:24px;list-style:none;align-items:center}
       .nav-links a{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ink-dim);transition:color .2s}
       .nav-links a:hover{color:var(--accent)}
@@ -269,7 +269,7 @@
     <!-- Navigation -->
     <nav role="navigation" aria-label="Main navigation">
         <div class="nav-container">
-            <div class="logo" aria-label="Ram Harikrishnan"><span class="dot"></span>RAM&nbsp;HARIKRISHNAN</div>
+            <div class="logo" aria-label="Ram Harikrishnan"><svg class="logo-mark" viewBox="15 17 35 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 22 L30 32 L20 42" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="33" y="38" width="14" height="6" rx="3" fill="var(--accent)"/></svg>RAM&nbsp;HARIKRISHNAN</div>
             <ul class="nav-links" role="menubar">
                 <li role="none"><a href="#home" role="menuitem">Home</a></li>
                 <li role="none"><a href="#achievements" role="menuitem">Awards</a></li>
