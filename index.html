@@ -100,9 +100,10 @@
       /* HERO */
       .hero{min-height:100vh;display:flex;align-items:center;padding-top:90px;padding-bottom:50px}
       .hero-content{display:flex;flex-direction:column;gap:40px;width:100%}
-      .hero-head{width:100%}
+      .hero-head{width:100%;display:flex;flex-direction:column;gap:30px}
+      .hero-head .eyebrow{margin-bottom:0}
+      .hero-head .hero-tagline{margin-top:0}
       .hero-body{display:grid;grid-template-columns:1.3fr .9fr;gap:56px;align-items:center}
-      .hero-tagline{margin-top:14px}
       .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-deep);display:flex;align-items:center;gap:12px;margin-bottom:24px}
       .eyebrow::before{content:"";width:38px;height:1px;background:var(--accent-deep)}
       .hero-name{font-family:var(--serif);font-weight:400;font-size:clamp(46px,7vw,92px);line-height:1.22;letter-spacing:-.01em}
