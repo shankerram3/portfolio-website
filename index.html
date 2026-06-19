@@ -104,6 +104,10 @@
       .eyebrow::before{content:"";width:38px;height:1px;background:var(--accent-deep)}
       .hero-title{font-family:var(--serif);font-weight:400;font-size:clamp(48px,7.5vw,96px);line-height:.95;letter-spacing:-.01em}
       .hero-title .it{font-style:italic;color:var(--accent)}
+      .hero-title .typed{color:var(--ink)}
+      .hero-title .caret{display:inline-block;width:3px;height:.82em;background:var(--accent);margin-left:8px;vertical-align:-0.04em;animation:blink 1.05s steps(1) infinite}
+      @keyframes blink{50%{opacity:0}}
+      @media(prefers-reduced-motion:reduce){.hero-title .caret{animation:none;opacity:0}}
       .hero-roles{font-family:var(--mono);font-size:14px;letter-spacing:.02em;color:var(--ink-dim);margin-top:22px}
       .hero-roles .role{color:var(--ink)}
       .hero-description{max-width:600px;margin-top:24px;font-size:18px;color:var(--ink-dim);line-height:1.6}
@@ -293,7 +297,7 @@
             <div class="hero-content">
                 <div class="hero-text">
                     <div class="eyebrow rv">Gen AI Developer · Backend Engineer · Available for freelance</div>
-                    <h1 class="hero-title rv">I ship <span class="it">production</span> AI systems.</h1>
+                    <h1 class="hero-title rv">I ship <span class="it">production</span> <span class="typed" id="typed">AI systems</span><span class="caret" aria-hidden="true"></span></h1>
                     <div class="hero-roles rv">
                         <span class="role">Gen AI Developer</span> &nbsp;/&nbsp;
                         <span class="role">AI Systems Engineer</span> &nbsp;/&nbsp;
@@ -854,6 +858,38 @@
             });
         }, { threshold: .12 });
         document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+        // Multilingual typewriter on "AI systems"
+        (function(){
+            const el = document.getElementById('typed');
+            if (!el) return;
+            const phrases = ["AI systems", "आर्टिफिशियल इंटेलिजेंस", "കൃത്രിമ ബുദ്ധി", "செயற்கை நுண்ணறிவு"];
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                el.textContent = phrases[0];
+                return;
+            }
+            const toClusters = (str) => {
+                if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+                    return [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(str)].map(s => s.segment);
+                }
+                return Array.from(str);
+            };
+            const wait = (ms) => new Promise(r => setTimeout(r, ms));
+            let pi = 0;
+            (async function loop(){
+                // start from the pre-filled English phrase already shown
+                await wait(1400);
+                while (true) {
+                    const g = toClusters(phrases[pi]);
+                    for (let i = g.length; i >= 0; i--) { el.textContent = g.slice(0, i).join(''); await wait(45); }
+                    await wait(220);
+                    pi = (pi + 1) % phrases.length;
+                    const n = toClusters(phrases[pi]);
+                    for (let i = 1; i <= n.length; i++) { el.textContent = n.slice(0, i).join(''); await wait(85); }
+                    await wait(1600);
+                }
+            })();
+        })();
     </script>
 </body>
 </html>
